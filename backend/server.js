@@ -1,10 +1,9 @@
-const http = require('http');
 const app = require('./src/app');
-
+const pool=require('./src/config/db')
 const PORT = process.env.PORT || 5000;
 
-const server = http.createServer(app);
+pool.query('SELECT NOW()')
 
-server.listen(PORT, () => {
+app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
