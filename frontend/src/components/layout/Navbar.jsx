@@ -50,35 +50,32 @@ export default function Navbar({ onOpenAuth, onOpenPostJob }) {
 
         {/* Right Side Actions */}
         <div className="hidden md:flex items-center gap-6">
-          <button 
-            type="button" 
-            onClick={() => onOpenAuth?.('login')}
+          <Link 
+            to="/signin" 
             className="text-[14.5px] font-medium text-gray-700 hover:text-black transition-colors cursor-pointer"
           >
             Sign In
-          </button>
+          </Link>
 
-          <button 
-            type="button" 
-            onClick={() => onOpenAuth?.('signup')}
+          <Link 
+            to="/signup" 
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-black hover:bg-neutral-800 text-white text-[14px] font-semibold transition-all active:scale-95 shadow-sm cursor-pointer"
           >
             <span>Get Started</span>
             <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center">
               <ArrowRight className="w-3 h-3 text-white" />
             </div>
-          </button>
+          </Link>
         </div>
 
         {/* Mobile menu trigger */}
         <div className="flex md:hidden items-center gap-3">
-          <button 
-            type="button" 
-            onClick={() => onOpenAuth?.('signup')}
+          <Link 
+            to="/signup" 
             className="px-3.5 py-1.5 rounded-full bg-black text-white text-xs font-semibold"
           >
             Get Started
-          </button>
+          </Link>
           <button 
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -99,13 +96,13 @@ export default function Navbar({ onOpenAuth, onOpenPostJob }) {
             <a href="#for-employers" onClick={() => { setMobileMenuOpen(false); onOpenPostJob?.(); }}>For Employers</a>
             <a href="#pricing" onClick={() => setMobileMenuOpen(false)}>Pricing</a>
             <hr className="border-gray-100" />
-            <button 
-              type="button"
-              onClick={() => { setMobileMenuOpen(false); onOpenAuth?.('login'); }}
-              className="text-left font-semibold text-gray-900"
+            <Link 
+              to="/signin"
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-left font-semibold text-gray-900 block"
             >
               Sign In
-            </button>
+            </Link>
           </nav>
         </div>
       )}

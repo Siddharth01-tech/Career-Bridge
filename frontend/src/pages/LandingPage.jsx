@@ -1,9 +1,9 @@
 import { useState, useMemo } from 'react'
+import { Link } from 'react-router-dom'
 import Navbar from '../components/layout/Navbar'
 import Footer from '../components/layout/Footer'
 import JobDetailsModal from '../components/landing/JobDetailsModal'
 import PostJobModal from '../components/landing/PostJobModal'
-import AuthModal from '../components/landing/AuthModal'
 import { 
   Search, 
   MapPin, 
@@ -83,7 +83,6 @@ export default function LandingPage() {
   const [selectedJob, setSelectedJob] = useState(null)
   const [isDetailsOpen, setIsDetailsOpen] = useState(false)
   const [isPostJobOpen, setIsPostJobOpen] = useState(false)
-  const [authModal, setAuthModal] = useState({ isOpen: false, mode: 'login' })
 
   const toggleSaveJob = (id) => {
     setSavedJobs((prev) => ({
@@ -122,7 +121,6 @@ export default function LandingPage() {
       
       {/* Navigation Bar */}
       <Navbar 
-        onOpenAuth={(mode) => setAuthModal({ isOpen: true, mode })}
         onOpenPostJob={() => setIsPostJobOpen(true)}
       />
 
@@ -156,24 +154,22 @@ export default function LandingPage() {
 
               {/* Action Buttons */}
               <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-10">
-                <button
-                  type="button"
-                  onClick={() => setAuthModal({ isOpen: true, mode: 'signup' })}
+                <Link
+                  to="/signup"
                   className="inline-flex items-center gap-3 px-6 py-3.5 rounded-full bg-black hover:bg-neutral-800 text-white text-[15px] font-semibold transition-all active:scale-95 shadow-md shadow-black/10 cursor-pointer"
                 >
                   <span>Get Started</span>
                   <div className="w-6 h-6 rounded-full bg-white/20 flex items-center justify-center">
                     <ArrowRight className="w-3.5 h-3.5 text-white" />
                   </div>
-                </button>
+                </Link>
 
-                <button
-                  type="button"
-                  onClick={() => setAuthModal({ isOpen: true, mode: 'login' })}
+                <Link
+                  to="/signin"
                   className="inline-flex items-center gap-2 px-5 py-3.5 rounded-full border border-gray-200/90 hover:border-gray-950 bg-white hover:bg-gray-50 text-gray-800 text-[15px] font-semibold transition-all active:scale-95 cursor-pointer shadow-xs"
                 >
                   <span>Sign In</span>
-                </button>
+                </Link>
 
                 <a 
                   href="#featured-opportunities"
@@ -453,12 +449,6 @@ export default function LandingPage() {
         isOpen={isPostJobOpen}
         onClose={() => setIsPostJobOpen(false)}
         onJobCreated={handleAddJob}
-      />
-
-      <AuthModal 
-        isOpen={authModal.isOpen}
-        mode={authModal.mode}
-        onClose={() => setAuthModal({ isOpen: false, mode: 'login' })}
       />
 
     </div>
