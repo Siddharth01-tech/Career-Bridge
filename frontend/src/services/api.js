@@ -119,4 +119,59 @@ export const authService = {
   },
 };
 
+export const jobService = {
+  /**
+   * Fetch all jobs with optional filters
+   * @param {Object} filters - { search, location, jobType, companyId }
+   */
+  async getAllJobs(filters = {}) {
+    const params = new URLSearchParams();
+    if (filters.search) params.append('search', filters.search);
+    if (filters.location) params.append('location', filters.location);
+    if (filters.jobType) params.append('jobType', filters.jobType);
+    if (filters.companyId) params.append('companyId', filters.companyId);
+    
+    const query = params.toString();
+    return apiRequest(`/jobs/getalljob${query ? `?${query}` : ''}`);
+  },
+
+  /**
+   * Fetch a single job by ID
+   * @param {string|number} id
+   */
+  async getJobById(id) {
+    return apiRequest(`/jobs/getajob/${id}`);
+  },
+};
+
+export const applicationService = {
+  /**
+   * Fetch candidate's own applications
+   */
+  async getMyApplications() {
+    return apiRequest('/applications/myapplication');
+  },
+
+  /**
+   * Apply for a job
+   * @param {Object} payload - { jobId, coverLetter }
+   */
+  async applyForJob({ jobId, coverLetter = '' }) {
+    return apiRequest('/applications/applyforjob', {
+      method: 'POST',
+      body: { jobId, coverLetter },
+    });
+  },
+};
+
+export const candidateService = {
+  /**
+   * Fetch candidate profile
+   */
+  async getProfile() {
+    return apiRequest('/candidate/getprofile');
+  },
+};
+
 export default authService;
+

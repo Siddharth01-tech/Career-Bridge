@@ -53,8 +53,14 @@ export default function Navbar({ onOpenAuth, onOpenPostJob }) {
         {/* Right Side Actions */}
         <div className="hidden md:flex items-center gap-4">
           {isAuthenticated && user ? (
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2.5 pl-2">
+            <div className="flex items-center gap-3">
+              <Link
+                to="/dashboard"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors border border-blue-200/60"
+              >
+                Dashboard
+              </Link>
+              <div className="flex items-center gap-2.5 pl-1">
                 <div className="w-8 h-8 rounded-full bg-orange-100 text-[#FF5C00] font-bold text-xs flex items-center justify-center border border-orange-200">
                   {user.name ? user.name.charAt(0).toUpperCase() : <User className="w-4 h-4" />}
                 </div>

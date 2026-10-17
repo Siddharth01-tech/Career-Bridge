@@ -57,7 +57,11 @@ export default function SignUpPage() {
       setSuccess(true)
 
       setTimeout(() => {
-        navigate('/')
+        if (role === 'recruiter') {
+          navigate('/')
+        } else {
+          navigate('/dashboard')
+        }
       }, 1500)
     } catch (err) {
       setError(err.message || 'Registration failed. Please try again.')

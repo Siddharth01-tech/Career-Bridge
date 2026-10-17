@@ -28,7 +28,11 @@ export default function SignInPage() {
       setLoggedInUser(result.user)
       setSuccess(true)
       setTimeout(() => {
-        navigate('/')
+        if (result?.user?.role === 'recruiter') {
+          navigate('/')
+        } else {
+          navigate('/dashboard')
+        }
       }, 1200)
     } catch (err) {
       setError(err.message || 'Invalid email or password. Please try again.')
