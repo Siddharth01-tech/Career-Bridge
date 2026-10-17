@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Eye, EyeOff, ArrowRight, ArrowLeft, CheckCircle2, User, Building2 } from 'lucide-react'
+import { Eye, EyeOff, ArrowRight, ArrowLeft, CheckCircle2, User, Building2, AlertCircle } from 'lucide-react'
+import { useAuth } from '../context/AuthContext'
 
 export default function SignUpPage() {
   const navigate = useNavigate()
+  const { register } = useAuth()
   const [role, setRole] = useState('candidate') // 'candidate' | 'recruiter'
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
@@ -14,13 +16,25 @@ export default function SignUpPage() {
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState('')
+  const [createdUser, setCreatedUser] = useState(null)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
 
-    if (password.length < 8) {
-      setError('Password must be at least 8 characters long.')
+    if (!fullName.trim()) {
+      setError('Please provide your full name.')
+      return
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email.trim())) {
+      setError('Please provide a valid email address.')
+      return
+    }
+
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters long.')
       return
     }
 
@@ -30,13 +44,26 @@ export default function SignUpPage() {
     }
 
     setLoading(true)
-    setTimeout(() => {
-      setLoading(false)
+
+    try {
+      const result = await register({
+        name: fullName.trim(),
+        email: email.trim().toLowerCase(),
+        password,
+        role,
+      })
+
+      setCreatedUser(result.user)
       setSuccess(true)
+
       setTimeout(() => {
         navigate('/')
-      }, 1400)
-    }, 800)
+      }, 1500)
+    } catch (err) {
+      setError(err.message || 'Registration failed. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -89,7 +116,10 @@ export default function SignUpPage() {
               </div>
               <h3 className="text-lg font-bold text-slate-900">Account Created Successfully!</h3>
               <p className="text-xs text-slate-500">
-                Welcome to CareerBridge as a {role === 'candidate' ? 'Candidate' : 'Recruiter'}.
+                Welcome{createdUser?.name ? `, ${createdUser.name}` : ''} to CareerBridge as a {role === 'candidate' ? 'Candidate' : 'Recruiter'}.
+              </p>
+              <p className="text-[11px] text-emerald-600 font-semibold">
+                Signing you in automatically...
               </p>
             </div>
           ) : (

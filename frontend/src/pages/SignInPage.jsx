@@ -1,29 +1,40 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Eye, EyeOff, ArrowLeft, CheckCircle2 } from 'lucide-react'
+import { Eye, EyeOff, ArrowLeft, CheckCircle2, AlertCircle } from 'lucide-react'
+import { useAuth } from '../context/AuthContext'
 
 export default function SignInPage() {
   const navigate = useNavigate()
+  const { login } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
-  const [rememberMe, setRememberMe] = useState(false)
+  const [rememberMe, setRememberMe] = useState(true)
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
+  const [error, setError] = useState('')
+  const [loggedInUser, setLoggedInUser] = useState(null)
   const [forgotModal, setForgotModal] = useState(false)
   const [resetEmail, setResetEmail] = useState('')
   const [resetSent, setResetSent] = useState(false)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
+    setError('')
     setLoading(true)
-    setTimeout(() => {
-      setLoading(false)
+
+    try {
+      const result = await login({ email, password, rememberMe })
+      setLoggedInUser(result.user)
       setSuccess(true)
       setTimeout(() => {
         navigate('/')
       }, 1200)
-    }, 800)
+    } catch (err) {
+      setError(err.message || 'Invalid email or password. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleForgotSubmit = (e) => {
@@ -80,12 +91,23 @@ export default function SignInPage() {
               <div className="w-14 h-14 bg-emerald-500 text-white rounded-full flex items-center justify-center mx-auto shadow-lg shadow-emerald-500/20">
                 <CheckCircle2 className="w-8 h-8" />
               </div>
-              <h3 className="text-lg font-bold text-slate-900">Signed In Successfully!</h3>
-              <p className="text-xs text-slate-500">Redirecting to your dashboard...</p>
+              <h3 className="text-lg font-bold text-slate-900">
+                Welcome back{loggedInUser?.name ? `, ${loggedInUser.name}` : ''}!
+              </h3>
+              <p className="text-xs text-slate-500">
+                {loggedInUser?.role ? `Signed in as ${loggedInUser.role}. ` : ''}Redirecting you...
+              </p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-5">
-              
+              {/* Error Alert */}
+              {error && (
+                <div className="p-3.5 rounded-xl bg-red-50 border border-red-200/80 text-xs font-semibold text-red-600 flex items-center gap-2.5">
+                  <AlertCircle className="w-4 h-4 text-red-500 shrink-0" />
+                  <span>{error}</span>
+                </div>
+              )}
+
               {/* Email Address */}
               <div>
                 <label className="block text-xs font-semibold text-slate-800 mb-2">

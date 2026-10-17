@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, Menu, X } from 'lucide-react'
+import { ArrowRight, Menu, X, User, LogOut } from 'lucide-react'
+import { useAuth } from '../../context/AuthContext'
 
 export default function Navbar({ onOpenAuth, onOpenPostJob }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const { user, isAuthenticated, logout } = useAuth()
 
   return (
     <header className="w-full bg-white border-b border-gray-100 sticky top-0 z-50">
@@ -49,33 +51,65 @@ export default function Navbar({ onOpenAuth, onOpenPostJob }) {
         </div>
 
         {/* Right Side Actions */}
-        <div className="hidden md:flex items-center gap-6">
-          <Link 
-            to="/signin" 
-            className="text-[14.5px] font-medium text-gray-700 hover:text-black transition-colors cursor-pointer"
-          >
-            Sign In
-          </Link>
+        <div className="hidden md:flex items-center gap-4">
+          {isAuthenticated && user ? (
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2.5 pl-2">
+                <div className="w-8 h-8 rounded-full bg-orange-100 text-[#FF5C00] font-bold text-xs flex items-center justify-center border border-orange-200">
+                  {user.name ? user.name.charAt(0).toUpperCase() : <User className="w-4 h-4" />}
+                </div>
+                <div className="text-left">
+                  <div className="text-xs font-bold text-slate-900 leading-tight">
+                    {user.name}
+                  </div>
+                  <div className="text-[10px] text-slate-400 capitalize font-medium">
+                    {user.role || 'Member'}
+                  </div>
+                </div>
+              </div>
 
-          <Link 
-            to="/signup" 
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-black hover:bg-neutral-800 text-white text-[14px] font-semibold transition-all active:scale-95 shadow-sm cursor-pointer"
-          >
-            <span>Get Started</span>
-            <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center">
-              <ArrowRight className="w-3 h-3 text-white" />
+              <button
+                type="button"
+                onClick={logout}
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold text-slate-600 hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer border border-slate-200/80"
+                title="Log out"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+                <span>Sign Out</span>
+              </button>
             </div>
-          </Link>
+          ) : (
+            <div className="flex items-center gap-6">
+              <Link 
+                to="/signin" 
+                className="text-[14.5px] font-medium text-gray-700 hover:text-black transition-colors cursor-pointer"
+              >
+                Sign In
+              </Link>
+
+              <Link 
+                to="/signup" 
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-black hover:bg-neutral-800 text-white text-[14px] font-semibold transition-all active:scale-95 shadow-sm cursor-pointer"
+              >
+                <span>Get Started</span>
+                <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center">
+                  <ArrowRight className="w-3 h-3 text-white" />
+                </div>
+              </Link>
+            </div>
+          )}
         </div>
 
         {/* Mobile menu trigger */}
         <div className="flex md:hidden items-center gap-3">
-          <Link 
-            to="/signup" 
-            className="px-3.5 py-1.5 rounded-full bg-black text-white text-xs font-semibold"
-          >
-            Get Started
-          </Link>
+          {!isAuthenticated && (
+            <Link 
+              to="/signup" 
+              className="px-3.5 py-1.5 rounded-full bg-black text-white text-xs font-semibold"
+            >
+              Get Started
+            </Link>
+          )}
           <button 
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -96,16 +130,43 @@ export default function Navbar({ onOpenAuth, onOpenPostJob }) {
             <a href="#for-employers" onClick={() => { setMobileMenuOpen(false); onOpenPostJob?.(); }}>For Employers</a>
             <a href="#pricing" onClick={() => setMobileMenuOpen(false)}>Pricing</a>
             <hr className="border-gray-100" />
-            <Link 
-              to="/signin"
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-left font-semibold text-gray-900 block"
-            >
-              Sign In
-            </Link>
+            
+            {isAuthenticated && user ? (
+              <div className="pt-1 pb-2 space-y-3">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-full bg-orange-100 text-[#FF5C00] font-bold text-xs flex items-center justify-center">
+                    {user.name ? user.name.charAt(0).toUpperCase() : <User className="w-4 h-4" />}
+                  </div>
+                  <div>
+                    <div className="text-xs font-bold text-slate-900">{user.name}</div>
+                    <div className="text-[11px] text-slate-400 capitalize">{user.role} • {user.email}</div>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    logout()
+                    setMobileMenuOpen(false)
+                  }}
+                  className="w-full text-left font-semibold text-red-600 flex items-center gap-2 text-xs pt-1"
+                >
+                  <LogOut className="w-3.5 h-3.5" />
+                  <span>Sign Out</span>
+                </button>
+              </div>
+            ) : (
+              <Link 
+                to="/signin"
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-left font-semibold text-gray-900 block"
+              >
+                Sign In
+              </Link>
+            )}
           </nav>
         </div>
       )}
     </header>
   )
 }
+
