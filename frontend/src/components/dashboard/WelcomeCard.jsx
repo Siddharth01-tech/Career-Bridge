@@ -34,10 +34,16 @@ export default function WelcomeCard({
       {/* Top Header Row: Welcome & Profile Strength */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-slate-100">
         <div>
-          {/* Tag */}
-          <div className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-600 tracking-wider uppercase mb-2">
-            <span className="w-2 h-2 rounded-full bg-amber-500" />
-            <span>Candidate Portal</span>
+          {/* Tag & Candidate Greeting */}
+          <div className="flex items-center gap-2 mb-2">
+            <div className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-600 tracking-wider uppercase">
+              <span className="w-2 h-2 rounded-full bg-amber-500" />
+              <span>Candidate Portal</span>
+            </div>
+            <span className="text-slate-300">•</span>
+            <span className="text-xs font-semibold text-slate-500">
+              Hi, {candidateName}
+            </span>
           </div>
 
           {/* Main Heading requested in prompt 2.C */}

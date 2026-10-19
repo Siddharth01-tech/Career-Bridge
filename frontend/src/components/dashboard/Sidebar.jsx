@@ -20,7 +20,7 @@ export default function Sidebar({
   onBrowseJobsClick,
   onApplicationsClick 
 }) {
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [loggingOut, setLoggingOut] = useState(false);
 

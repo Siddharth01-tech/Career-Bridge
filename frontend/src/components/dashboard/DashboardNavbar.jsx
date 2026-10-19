@@ -6,21 +6,16 @@ import {
   ChevronDown, 
   User, 
   Settings, 
-  LogOut, 
-  CheckCircle2, 
-  Radio, 
-  Sparkles,
-  ExternalLink
+  LogOut 
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 export default function DashboardNavbar({ 
   onToggleMobile, 
   isLiveApi = false,
-  onOpenNotifications,
   unreadCount = 2
 }) {
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
