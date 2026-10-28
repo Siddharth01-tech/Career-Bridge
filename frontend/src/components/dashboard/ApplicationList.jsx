@@ -27,8 +27,8 @@ export default function ApplicationList({
 
     if (s.includes('shortlist') || s.includes('interview')) {
       return (
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200/70">
-          <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-orange-50 text-[#D9480F] border border-orange-200/70">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#FF5A0A]" />
           <span>Shortlisted</span>
         </span>
       );
@@ -54,8 +54,8 @@ export default function ApplicationList({
 
     // Default: Pending
     return (
-      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-orange-50 text-orange-700 border border-orange-200/70">
-        <span className="w-1.5 h-1.5 rounded-full bg-orange-500" />
+      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+        <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
         <span>Pending</span>
       </span>
     );
@@ -64,9 +64,9 @@ export default function ApplicationList({
   // Company logo initial helper
   const getCompanyBg = (name = '') => {
     const colors = [
-      'bg-slate-900 text-white',
-      'bg-blue-600 text-white',
-      'bg-indigo-600 text-white',
+      'bg-[#080D1C] text-white',
+      'bg-orange-600 text-white',
+      'bg-slate-700 text-white',
       'bg-amber-600 text-white',
       'bg-emerald-600 text-white',
     ];
@@ -90,11 +90,11 @@ export default function ApplicationList({
     }
   };
 
-  // G. Empty State: When candidate has no applications
+  // Empty State: When candidate has no applications
   if (!applications || applications.length === 0) {
     return (
       <div className="bg-white rounded-2xl p-8 sm:p-12 border border-slate-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.02)] text-center">
-        <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-4 border border-blue-100 shadow-2xs">
+        <div className="w-14 h-14 rounded-2xl bg-orange-50 text-[#FF5A0A] flex items-center justify-center mx-auto mb-4 border border-orange-100 shadow-2xs">
           <FileText className="w-7 h-7" />
         </div>
         <h3 className="text-lg font-bold text-slate-900 mb-1.5">
@@ -106,7 +106,7 @@ export default function ApplicationList({
         <button
           type="button"
           onClick={onBrowseJobs}
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-semibold transition-all shadow-xs cursor-pointer active:scale-95"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#FF5A0A] hover:bg-[#E44D00] text-white text-xs sm:text-sm font-bold transition-all shadow-xs cursor-pointer active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A0A]"
         >
           <span>Browse Jobs</span>
           <ArrowRight className="w-4 h-4" />
@@ -145,7 +145,7 @@ export default function ApplicationList({
                   >
                     {/* Job Title & Spec */}
                     <td className="py-4 px-6">
-                      <div className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+                      <div className="font-bold text-slate-900 group-hover:text-[#FF5A0A] transition-colors">
                         {jobTitle}
                       </div>
                       <div className="text-[11px] text-slate-400 mt-0.5">
@@ -180,7 +180,7 @@ export default function ApplicationList({
                       <button
                         type="button"
                         onClick={() => setSelectedApp(app)}
-                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-blue-600 hover:bg-blue-50 border border-slate-200 transition-colors cursor-pointer"
+                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 hover:text-[#FF5A0A] hover:bg-orange-50 hover:border-orange-200/80 border border-slate-200 transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A0A]"
                       >
                         <span>View</span>
                       </button>
@@ -224,7 +224,7 @@ export default function ApplicationList({
                   <button
                     type="button"
                     onClick={() => setSelectedApp(app)}
-                    className="text-xs font-semibold text-blue-600 hover:text-blue-700"
+                    className="text-xs font-bold text-[#FF5A0A] hover:underline"
                   >
                     View Details &rarr;
                   </button>
@@ -241,7 +241,7 @@ export default function ApplicationList({
           <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95">
             <div className="flex items-start justify-between pb-4 border-b border-slate-100">
               <div>
-                <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">
+                <span className="text-xs font-bold text-[#FF5A0A] uppercase tracking-wider">
                   Application Details
                 </span>
                 <h3 className="text-lg font-bold text-slate-900 mt-1">
@@ -255,6 +255,7 @@ export default function ApplicationList({
                 type="button"
                 onClick={() => setSelectedApp(null)}
                 className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+                aria-label="Close details"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -292,7 +293,7 @@ export default function ApplicationList({
               <button
                 type="button"
                 onClick={() => setSelectedApp(null)}
-                className="px-5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold cursor-pointer"
+                className="px-5 py-2 rounded-xl bg-[#080D1C] hover:bg-slate-800 text-white text-xs font-semibold cursor-pointer"
               >
                 Close
               </button>

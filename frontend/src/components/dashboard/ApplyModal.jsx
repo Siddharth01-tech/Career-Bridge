@@ -69,7 +69,7 @@ export default function ApplyModal({
           type="button"
           onClick={onClose}
           disabled={loading}
-          className="absolute top-5 right-5 p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+          className="absolute top-5 right-5 p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
           aria-label="Close dialog"
         >
           <X className="w-5 h-5" />
@@ -77,7 +77,7 @@ export default function ApplyModal({
 
         {/* Modal Header */}
         <div className="mb-6">
-          <span className="text-[11px] font-bold text-blue-600 uppercase tracking-wider">
+          <span className="text-[11px] font-bold text-[#FF5A0A] uppercase tracking-wider">
             Job Application
           </span>
           <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mt-1">
@@ -88,7 +88,7 @@ export default function ApplyModal({
             <span>•</span>
             <span>{job.location || 'Remote'}</span>
             <span>•</span>
-            <span className="text-blue-600 font-medium">{job.job_type || 'Full-time'}</span>
+            <span className="text-[#FF5A0A] font-medium">{job.job_type || 'Full-time'}</span>
           </div>
         </div>
 
@@ -101,8 +101,8 @@ export default function ApplyModal({
             <h3 className="text-lg font-bold text-slate-900">
               Application Submitted!
             </h3>
-            <p className="text-xs text-slate-500 max-w-sm mx-auto">
-              Your profile and application have been sent to {job.company_name || job.company}. Track its status on your dashboard.
+            <p className="text-xs text-slate-500 max-w-sm mx-auto leading-relaxed">
+              Your profile and application have been sent to {job.company_name || job.company}. Track its status directly from your dashboard.
             </p>
           </div>
         ) : (
@@ -137,10 +137,10 @@ export default function ApplyModal({
               </label>
               <div className="flex items-center justify-between p-3 rounded-xl border border-slate-200 bg-white text-xs">
                 <div className="flex items-center gap-2 text-slate-700">
-                  <FileText className="w-4 h-4 text-blue-600" />
+                  <FileText className="w-4 h-4 text-[#FF5A0A]" />
                   <span className="font-medium">Candidate_Resume_Latest.pdf</span>
                 </div>
-                <span className="text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">
+                <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200/60">
                   Active
                 </span>
               </div>
@@ -156,7 +156,7 @@ export default function ApplyModal({
                 placeholder="Briefly introduce yourself and what excites you about this role..."
                 value={coverLetter}
                 onChange={(e) => setCoverLetter(e.target.value)}
-                className="w-full text-xs text-slate-800 p-3 rounded-xl border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all placeholder-slate-400 resize-none"
+                className="w-full text-xs text-slate-800 p-3 rounded-xl border border-slate-200 focus:border-[#FF5A0A] focus:ring-2 focus:ring-[#FF5A0A]/25 outline-none transition-all placeholder-slate-400 resize-none"
               />
             </div>
 
@@ -174,7 +174,7 @@ export default function ApplyModal({
               <button
                 type="submit"
                 disabled={loading}
-                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs hover:shadow-md transition-all cursor-pointer active:scale-95 disabled:opacity-50"
+                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#FF5A0A] hover:bg-[#E44D00] text-white text-xs font-bold shadow-xs hover:shadow-sm transition-all cursor-pointer active:scale-95 disabled:opacity-50"
               >
                 <Send className="w-3.5 h-3.5" />
                 <span>{loading ? 'Submitting...' : 'Submit Application'}</span>

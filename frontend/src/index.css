@@ -3,6 +3,35 @@
 @layer base {
   :root {
     --font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    
+    /* CareerBridge Brand Design Tokens */
+    --cb-brand: #FF5A0A;
+    --cb-brand-hover: #E44D00;
+    --cb-brand-light: #FFF5EE;
+    --cb-brand-subtle: #FFF0E6;
+    --cb-brand-border: #FFD6C2;
+    
+    /* Neutrals & Dark Accents */
+    --cb-navy: #080D1C;
+    --cb-text-primary: #0F172A;
+    --cb-text-secondary: #64748B;
+    --cb-text-muted: #94A3B8;
+    --cb-border: #E2E8F0;
+    --cb-border-subtle: #F1F5F9;
+    --cb-bg-dashboard: #F8FAFC;
+    
+    /* Semantic Feedback States */
+    --cb-success: #10B981;
+    --cb-success-bg: #ECFDF5;
+    --cb-success-border: #A7F3D0;
+    
+    --cb-warning: #F59E0B;
+    --cb-warning-bg: #FFFBEB;
+    --cb-warning-border: #FDE68A;
+    
+    --cb-error: #EF4444;
+    --cb-error-bg: #FEF2F2;
+    --cb-error-border: #FECACA;
   }
 
   html {
@@ -11,23 +40,23 @@
 
   body {
     font-family: var(--font-family);
-    background-color: #f8faff;
-    color: #0f172a;
+    background-color: #ffffff;
+    color: var(--cb-text-primary);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
   }
 
   ::selection {
-    background-color: #ffedd5;
-    color: #9a3412;
+    background-color: #FED7AA;
+    color: #9A3412;
   }
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar-track {
@@ -43,20 +72,26 @@
   background: #94a3b8;
 }
 
-/* Custom keyframe animations */
+/* Accessible focus outline utility */
+.focus-ring {
+  outline: none;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.focus-ring:focus-visible {
+  box-shadow: 0 0 0 3px rgba(255, 90, 10, 0.25);
+  border-color: #FF5A0A;
+}
+
+/* Subtle animations */
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-8px); }
+  50% { transform: translateY(-6px); }
 }
 
 @keyframes pulse-subtle {
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.85; transform: scale(0.98); }
-}
-
-@keyframes shine {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
 }
 
 .animate-float {
@@ -67,7 +102,13 @@
   animation: pulse-subtle 3s ease-in-out infinite;
 }
 
-.animate-shine {
-  animation: shine 2.5s infinite;
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
-

@@ -1,50 +1,49 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { ArrowRight, Menu, X, User, LogOut } from 'lucide-react'
-import { useAuth } from '../../context/AuthContext'
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { ArrowRight, Menu, X, User, LogOut } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
+import BrandLogo from '../common/BrandLogo';
 
-export default function Navbar({ onOpenAuth, onOpenPostJob }) {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const { user, isAuthenticated, logout } = useAuth()
+export default function Navbar({ onOpenPostJob }) {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { user, isAuthenticated, logout } = useAuth();
 
   return (
-    <header className="w-full bg-white border-b border-gray-100 sticky top-0 z-50">
+    <header className="w-full bg-white/95 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-50 transition-colors">
       <div className="max-w-[1360px] mx-auto px-4 sm:px-8 h-20 flex items-center justify-between">
         
         {/* Brand Logo */}
         <div className="flex items-center gap-10">
-          <Link to="/" className="flex items-center gap-2.5 group">
-            <div className="w-8 h-8 rounded-lg bg-black flex items-center justify-center text-white shadow-xs">
-              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="3" />
-                <path d="M3 12h3m12 0h3M12 3v3m0 12v3" />
-                <path d="M6 18a9 9 0 0 1 12 0" stroke="#FF5C00" />
-              </svg>
-            </div>
-            <span className="text-[21px] font-bold text-gray-950 tracking-tight">
-              CareerBridge
-            </span>
-          </Link>
+          <BrandLogo size="md" />
 
           {/* Center Navigation Links */}
-          <nav className="hidden md:flex items-center gap-8 text-[14.5px] font-medium text-gray-700">
-            <a href="#find-jobs" className="hover:text-black transition-colors">
+          <nav className="hidden md:flex items-center gap-8 text-[14.5px] font-medium text-slate-600" aria-label="Main navigation">
+            <a 
+              href="#featured-opportunities" 
+              className="hover:text-slate-950 transition-colors focus:outline-none focus-visible:text-[#FF5A0A]"
+            >
               Find Jobs
             </a>
-            <a href="#companies" className="hover:text-black transition-colors">
+            <a 
+              href="#companies" 
+              className="hover:text-slate-950 transition-colors focus:outline-none focus-visible:text-[#FF5A0A]"
+            >
               Companies
             </a>
             <a 
               href="#for-employers" 
               onClick={(e) => {
-                e.preventDefault()
-                onOpenPostJob?.()
+                e.preventDefault();
+                onOpenPostJob?.();
               }}
-              className="hover:text-black transition-colors cursor-pointer"
+              className="hover:text-slate-950 transition-colors cursor-pointer focus:outline-none focus-visible:text-[#FF5A0A]"
             >
               For Employers
             </a>
-            <a href="#pricing" className="hover:text-black transition-colors">
+            <a 
+              href="#pricing" 
+              className="hover:text-slate-950 transition-colors focus:outline-none focus-visible:text-[#FF5A0A]"
+            >
               Pricing
             </a>
           </nav>
@@ -56,12 +55,12 @@ export default function Navbar({ onOpenAuth, onOpenPostJob }) {
             <div className="flex items-center gap-3">
               <Link
                 to="/dashboard"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors border border-blue-200/60"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-orange-50 text-[#FF5A0A] hover:bg-orange-100 transition-colors border border-orange-200/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A0A]"
               >
                 Dashboard
               </Link>
               <div className="flex items-center gap-2.5 pl-1">
-                <div className="w-8 h-8 rounded-full bg-orange-100 text-[#FF5C00] font-bold text-xs flex items-center justify-center border border-orange-200">
+                <div className="w-8 h-8 rounded-full bg-orange-100 text-[#FF5A0A] font-bold text-xs flex items-center justify-center border border-orange-200 shadow-2xs">
                   {user.name ? user.name.charAt(0).toUpperCase() : <User className="w-4 h-4" />}
                 </div>
                 <div className="text-left">
@@ -69,7 +68,7 @@ export default function Navbar({ onOpenAuth, onOpenPostJob }) {
                     {user.name}
                   </div>
                   <div className="text-[10px] text-slate-400 capitalize font-medium">
-                    {user.role || 'Member'}
+                    {user.role || 'Candidate'}
                   </div>
                 </div>
               </div>
@@ -77,8 +76,8 @@ export default function Navbar({ onOpenAuth, onOpenPostJob }) {
               <button
                 type="button"
                 onClick={logout}
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold text-slate-600 hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer border border-slate-200/80"
-                title="Log out"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold text-slate-600 hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer border border-slate-200/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400"
+                title="Sign out of account"
               >
                 <LogOut className="w-3.5 h-3.5" />
                 <span>Sign Out</span>
@@ -88,14 +87,14 @@ export default function Navbar({ onOpenAuth, onOpenPostJob }) {
             <div className="flex items-center gap-6">
               <Link 
                 to="/signin" 
-                className="text-[14.5px] font-medium text-gray-700 hover:text-black transition-colors cursor-pointer"
+                className="text-[14.5px] font-semibold text-slate-700 hover:text-slate-950 transition-colors cursor-pointer focus:outline-none focus-visible:text-[#FF5A0A]"
               >
                 Sign In
               </Link>
 
               <Link 
                 to="/signup" 
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-black hover:bg-neutral-800 text-white text-[14px] font-semibold transition-all active:scale-95 shadow-sm cursor-pointer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#080D1C] hover:bg-slate-800 text-white text-[14px] font-semibold transition-all active:scale-95 shadow-sm cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A0A]"
               >
                 <span>Get Started</span>
                 <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center">
@@ -107,11 +106,11 @@ export default function Navbar({ onOpenAuth, onOpenPostJob }) {
         </div>
 
         {/* Mobile menu trigger */}
-        <div className="flex md:hidden items-center gap-3">
+        <div className="flex md:hidden items-center gap-2.5">
           {!isAuthenticated && (
             <Link 
               to="/signup" 
-              className="px-3.5 py-1.5 rounded-full bg-black text-white text-xs font-semibold"
+              className="px-3.5 py-1.5 rounded-full bg-[#080D1C] text-white text-xs font-semibold shadow-2xs"
             >
               Get Started
             </Link>
@@ -119,7 +118,9 @@ export default function Navbar({ onOpenAuth, onOpenPostJob }) {
           <button 
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-1.5 rounded-lg text-gray-700 hover:bg-gray-100"
+            className="p-2 rounded-xl text-slate-700 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A0A]"
+            aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={mobileMenuOpen}
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -129,18 +130,46 @@ export default function Navbar({ onOpenAuth, onOpenPostJob }) {
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-gray-100 bg-white px-5 py-4 space-y-3">
-          <nav className="flex flex-col gap-3 text-sm font-medium text-gray-700">
-            <a href="#find-jobs" onClick={() => setMobileMenuOpen(false)}>Find Jobs</a>
-            <a href="#companies" onClick={() => setMobileMenuOpen(false)}>Companies</a>
-            <a href="#for-employers" onClick={() => { setMobileMenuOpen(false); onOpenPostJob?.(); }}>For Employers</a>
-            <a href="#pricing" onClick={() => setMobileMenuOpen(false)}>Pricing</a>
-            <hr className="border-gray-100" />
+        <div className="md:hidden border-t border-slate-100 bg-white px-5 py-5 space-y-4 shadow-lg animate-in fade-in duration-150">
+          <nav className="flex flex-col gap-3.5 text-sm font-semibold text-slate-700" aria-label="Mobile navigation">
+            <a 
+              href="#featured-opportunities" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="hover:text-[#FF5A0A] py-1 transition-colors"
+            >
+              Find Jobs
+            </a>
+            <a 
+              href="#companies" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="hover:text-[#FF5A0A] py-1 transition-colors"
+            >
+              Companies
+            </a>
+            <a 
+              href="#for-employers" 
+              onClick={() => { 
+                setMobileMenuOpen(false); 
+                onOpenPostJob?.(); 
+              }}
+              className="hover:text-[#FF5A0A] py-1 transition-colors"
+            >
+              For Employers
+            </a>
+            <a 
+              href="#pricing" 
+              onClick={() => setMobileMenuOpen(false)}
+              className="hover:text-[#FF5A0A] py-1 transition-colors"
+            >
+              Pricing
+            </a>
+
+            <hr className="border-slate-100" />
             
             {isAuthenticated && user ? (
               <div className="pt-1 pb-2 space-y-3">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-full bg-orange-100 text-[#FF5C00] font-bold text-xs flex items-center justify-center">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-full bg-orange-100 text-[#FF5A0A] font-bold text-xs flex items-center justify-center border border-orange-200">
                     {user.name ? user.name.charAt(0).toUpperCase() : <User className="w-4 h-4" />}
                   </div>
                   <div>
@@ -148,31 +177,48 @@ export default function Navbar({ onOpenAuth, onOpenPostJob }) {
                     <div className="text-[11px] text-slate-400 capitalize">{user.role} • {user.email}</div>
                   </div>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    logout()
-                    setMobileMenuOpen(false)
-                  }}
-                  className="w-full text-left font-semibold text-red-600 flex items-center gap-2 text-xs pt-1"
-                >
-                  <LogOut className="w-3.5 h-3.5" />
-                  <span>Sign Out</span>
-                </button>
+                <div className="flex items-center gap-2 pt-2">
+                  <Link
+                    to="/dashboard"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex-1 text-center py-2 rounded-xl bg-orange-50 text-[#FF5A0A] font-bold text-xs border border-orange-200"
+                  >
+                    Go to Dashboard
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      logout();
+                      setMobileMenuOpen(false);
+                    }}
+                    className="px-3 py-2 rounded-xl border border-slate-200 text-red-600 font-semibold text-xs hover:bg-red-50 flex items-center gap-1.5"
+                  >
+                    <LogOut className="w-3.5 h-3.5" />
+                    <span>Sign Out</span>
+                  </button>
+                </div>
               </div>
             ) : (
-              <Link 
-                to="/signin"
-                onClick={() => setMobileMenuOpen(false)}
-                className="text-left font-semibold text-gray-900 block"
-              >
-                Sign In
-              </Link>
+              <div className="flex flex-col gap-2 pt-1">
+                <Link 
+                  to="/signin"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full text-center py-2.5 rounded-xl border border-slate-200 text-slate-800 font-bold text-sm hover:bg-slate-50 transition-colors"
+                >
+                  Sign In
+                </Link>
+                <Link 
+                  to="/signup"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full text-center py-2.5 rounded-xl bg-[#080D1C] text-white font-bold text-sm shadow-xs hover:bg-slate-800 transition-colors"
+                >
+                  Get Started Free
+                </Link>
+              </div>
             )}
           </nav>
         </div>
       )}
     </header>
-  )
+  );
 }
-

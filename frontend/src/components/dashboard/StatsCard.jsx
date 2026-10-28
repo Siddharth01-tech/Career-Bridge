@@ -5,17 +5,16 @@ export function StatsCard({
   value, 
   icon: Icon, 
   badge, 
-  badgeType = 'neutral', // 'neutral' | 'in-progress' | 'success' | 'highlight'
+  badgeType = 'neutral', // 'neutral' | 'in-progress' | 'success' | 'brand'
   subtitle,
-  iconBg = 'bg-blue-50 text-blue-600',
+  iconBg = 'bg-orange-50 text-[#FF5A0A]',
   onClick
 }) {
   const badgeStyles = {
     neutral: 'bg-slate-100 text-slate-700 border-slate-200/60',
     'in-progress': 'bg-amber-50 text-amber-700 border-amber-200/70',
     success: 'bg-emerald-50 text-emerald-700 border-emerald-200/70',
-    highlight: 'bg-purple-50 text-purple-700 border-purple-200/70',
-    blue: 'bg-blue-50 text-blue-700 border-blue-200/70',
+    brand: 'bg-orange-50 text-[#D9480F] border-orange-200/70',
   };
 
   return (
@@ -40,7 +39,7 @@ export function StatsCard({
             </span>
           )}
 
-          <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${iconBg}`}>
+          <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border border-black/5 ${iconBg}`}>
             <Icon className="w-4 h-4" />
           </div>
         </div>
@@ -48,7 +47,7 @@ export function StatsCard({
 
       {/* Main Metric Value */}
       <div className="my-3">
-        <div className="text-3xl sm:text-4xl font-extrabold text-slate-950 tracking-tight leading-none">
+        <div className="text-3xl sm:text-4xl font-extrabold text-[#080D1C] tracking-tight leading-none">
           {value}
         </div>
       </div>
@@ -58,7 +57,7 @@ export function StatsCard({
         <div className="pt-2 border-t border-slate-100 text-[11px] sm:text-xs text-slate-500 flex items-center justify-between">
           <span>{subtitle}</span>
           {onClick && (
-            <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-600 transition-colors" />
+            <ArrowUpRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#FF5A0A] transition-colors" />
           )}
         </div>
       )}
@@ -78,9 +77,9 @@ export default function StatsGroup({
       title: 'Total Applications',
       value: totalApplications,
       icon: FolderKanban,
-      iconBg: 'bg-blue-50 text-blue-600',
+      iconBg: 'bg-orange-50 text-[#FF5A0A]',
       badge: '+2 this week',
-      badgeType: 'blue',
+      badgeType: 'brand',
       subtitle: 'Across active tech opportunities',
     },
     {
@@ -88,7 +87,7 @@ export default function StatsGroup({
       title: 'Under Review',
       value: underReview,
       icon: Clock3,
-      iconBg: 'bg-amber-50 text-amber-600',
+      iconBg: 'bg-amber-50 text-amber-700',
       badge: 'In Progress',
       badgeType: 'in-progress',
       subtitle: 'Average recruiter wait: 3 business days',
@@ -98,9 +97,9 @@ export default function StatsGroup({
       title: 'Shortlisted',
       value: shortlisted,
       icon: Award,
-      iconBg: 'bg-purple-50 text-purple-600',
-      badge: 'Next Stage',
-      badgeType: 'highlight',
+      iconBg: 'bg-emerald-50 text-emerald-700',
+      badge: 'Interview Stage',
+      badgeType: 'success',
       subtitle: '1 technical interview scheduled',
     },
   ];

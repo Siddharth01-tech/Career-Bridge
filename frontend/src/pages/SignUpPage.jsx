@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Eye, EyeOff, ArrowRight, ArrowLeft, CheckCircle2, User, Building2, AlertCircle } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
+import BrandLogo from '../components/common/BrandLogo'
 
 export default function SignUpPage() {
   const navigate = useNavigate()
@@ -90,16 +91,7 @@ export default function SignUpPage() {
           
           {/* Logo Network Icon Badge */}
           <div className="flex justify-center mb-5">
-            <Link to="/" className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-900 shadow-xs hover:scale-105 transition-transform">
-              <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="2.5" />
-                <circle cx="12" cy="4" r="2" />
-                <circle cx="12" cy="20" r="2" />
-                <circle cx="4" cy="12" r="2" />
-                <circle cx="20" cy="12" r="2" />
-                <path d="M12 6.5v3M12 14.5v3M6.5 12h3M14.5 12h3" />
-              </svg>
-            </Link>
+            <BrandLogo size="lg" showText={false} />
           </div>
 
           {/* Heading */}

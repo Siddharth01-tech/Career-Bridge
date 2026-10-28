@@ -29,15 +29,15 @@ export default function WelcomeCard({
   return (
     <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-[0_2px_12px_rgba(0,0,0,0.03)] relative overflow-hidden">
       {/* Decorative subtle ambient accent */}
-      <div className="absolute top-0 right-0 w-80 h-80 bg-blue-50/50 rounded-full blur-3xl -z-10 pointer-events-none" />
+      <div className="absolute top-0 right-0 w-80 h-80 bg-orange-50/40 rounded-full blur-3xl -z-10 pointer-events-none" />
 
       {/* Top Header Row: Welcome & Profile Strength */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-slate-100">
         <div>
           {/* Tag & Candidate Greeting */}
           <div className="flex items-center gap-2 mb-2">
-            <div className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-600 tracking-wider uppercase">
-              <span className="w-2 h-2 rounded-full bg-amber-500" />
+            <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[#FF5A0A] tracking-wider uppercase">
+              <span className="w-2 h-2 rounded-full bg-[#FF5A0A]" />
               <span>Candidate Portal</span>
             </div>
             <span className="text-slate-300">•</span>
@@ -46,28 +46,28 @@ export default function WelcomeCard({
             </span>
           </div>
 
-          {/* Main Heading requested in prompt 2.C */}
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-950 tracking-tight">
+          {/* Main Heading */}
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-[#080D1C] tracking-tight">
             Your next opportunity starts here.
           </h2>
 
-          {/* Description requested in prompt 2.C */}
+          {/* Description */}
           <p className="text-sm sm:text-base text-slate-500 mt-1.5 max-w-2xl leading-relaxed">
-            Explore jobs, track your applications, and take the next step in your career.
+            Explore curated jobs, track your applications, and take the next step in your career with transparent compensation.
           </p>
 
-          {/* Quick Action Button requested in prompt 2.C */}
-          <div className="mt-4 flex items-center gap-3">
+          {/* Quick Action Button */}
+          <div className="mt-4 flex flex-wrap items-center gap-3">
             <button
               type="button"
               onClick={onBrowseClick}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-semibold transition-all shadow-sm hover:shadow-md cursor-pointer active:scale-95"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#FF5A0A] hover:bg-[#E44D00] text-white text-xs sm:text-sm font-bold transition-all shadow-xs hover:shadow-sm cursor-pointer active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A0A]"
             >
               <span>Browse Jobs</span>
               <ArrowRight className="w-4 h-4" />
             </button>
 
-            <span className="text-xs text-slate-400">
+            <span className="text-xs text-slate-400 font-medium">
               Personalized for your career interests
             </span>
           </div>
@@ -76,8 +76,8 @@ export default function WelcomeCard({
         {/* Profile Strength Widget */}
         <div className="self-start lg:self-center shrink-0">
           <div className="flex items-center gap-3.5 bg-slate-50 border border-slate-200/70 rounded-2xl px-4 py-3 shadow-2xs">
-            <div className="w-10 h-10 rounded-xl bg-black text-amber-400 flex items-center justify-center shrink-0 shadow-xs">
-              <Zap className="w-5 h-5 fill-amber-400" />
+            <div className="w-10 h-10 rounded-xl bg-[#080D1C] text-[#FF5A0A] flex items-center justify-center shrink-0 shadow-xs">
+              <Zap className="w-5 h-5 fill-[#FF5A0A]" />
             </div>
             <div>
               <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
@@ -97,19 +97,20 @@ export default function WelcomeCard({
       <form onSubmit={handleSearchSubmit} className="pt-6">
         <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-2.5 bg-slate-50/80 p-2 rounded-2xl border border-slate-200/80">
           {/* Keyword / Role input */}
-          <div className="flex-1 flex items-center gap-2.5 px-3 py-2 bg-white rounded-xl border border-slate-200/60 shadow-2xs">
-            <Search className="w-4 h-4 text-slate-400 shrink-0" />
+          <div className="flex-1 flex items-center gap-2.5 px-3 py-2 bg-white rounded-xl border border-slate-200/70 shadow-2xs transition-all focus-within:ring-2 focus-within:ring-[#FF5A0A]/30 focus-within:border-[#FF5A0A]">
+            <Search className="w-4 h-4 text-[#FF5A0A] shrink-0" />
             <input
               type="text"
               placeholder="Role, skill, or keyword (e.g. Frontend, React)"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full text-xs sm:text-sm text-slate-800 placeholder-slate-400 bg-transparent focus:outline-none"
+              aria-label="Filter jobs by keyword or role"
             />
           </div>
 
           {/* Location input */}
-          <div className="lg:w-60 flex items-center gap-2.5 px-3 py-2 bg-white rounded-xl border border-slate-200/60 shadow-2xs">
+          <div className="lg:w-60 flex items-center gap-2.5 px-3 py-2 bg-white rounded-xl border border-slate-200/70 shadow-2xs transition-all focus-within:ring-2 focus-within:ring-[#FF5A0A]/30 focus-within:border-[#FF5A0A]">
             <MapPin className="w-4 h-4 text-slate-400 shrink-0" />
             <input
               type="text"
@@ -117,16 +118,18 @@ export default function WelcomeCard({
               value={locationTerm}
               onChange={(e) => setLocationTerm(e.target.value)}
               className="w-full text-xs sm:text-sm text-slate-800 placeholder-slate-400 bg-transparent focus:outline-none"
+              aria-label="Filter jobs by location"
             />
           </div>
 
           {/* Job Type Select */}
-          <div className="lg:w-44 flex items-center gap-2 px-3 py-2 bg-white rounded-xl border border-slate-200/60 shadow-2xs">
+          <div className="lg:w-44 flex items-center gap-2 px-3 py-2 bg-white rounded-xl border border-slate-200/70 shadow-2xs transition-all focus-within:ring-2 focus-within:ring-[#FF5A0A]/30 focus-within:border-[#FF5A0A]">
             <Briefcase className="w-4 h-4 text-slate-400 shrink-0" />
             <select
               value={jobType}
               onChange={(e) => setJobType(e.target.value)}
               className="w-full text-xs sm:text-sm text-slate-800 bg-transparent focus:outline-none cursor-pointer"
+              aria-label="Filter jobs by job type"
             >
               <option value="">All Job Types</option>
               <option value="Full-time">Full-Time</option>
@@ -140,7 +143,7 @@ export default function WelcomeCard({
           <div className="flex items-center gap-2">
             <button
               type="submit"
-              className="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-slate-950 hover:bg-blue-600 text-white text-xs sm:text-sm font-semibold transition-all cursor-pointer shadow-xs active:scale-95"
+              className="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-[#080D1C] hover:bg-slate-800 text-white text-xs sm:text-sm font-bold transition-all cursor-pointer shadow-xs active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A0A]"
             >
               <span>Search Jobs</span>
               <ArrowRight className="w-4 h-4" />
@@ -150,7 +153,7 @@ export default function WelcomeCard({
               <button
                 type="button"
                 onClick={handleClear}
-                className="px-3 py-2 text-xs font-medium text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
+                className="px-3 py-2 text-xs font-semibold text-slate-500 hover:text-[#FF5A0A] transition-colors cursor-pointer"
               >
                 Clear
               </button>

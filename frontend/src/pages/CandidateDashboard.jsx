@@ -16,7 +16,7 @@ import JobCard from '../components/dashboard/JobCard';
 import ApplicationList from '../components/dashboard/ApplicationList';
 import ApplyModal from '../components/dashboard/ApplyModal';
 
-// Sample jobs matching prompt requirements (Frontend Developer, Backend Developer, Software Engineer Intern, UI/UX Designer)
+// Sample jobs matching prompt requirements
 const INITIAL_SAMPLE_JOBS = [
   {
     id: 'sample-job-1',
@@ -154,7 +154,6 @@ export default function CandidateDashboard() {
       try {
         const jobsResponse = await jobService.getAllJobs();
         if (isMounted && jobsResponse?.jobs && jobsResponse.jobs.length > 0) {
-          // If backend has fewer than 3 jobs, merge with sample jobs to ensure desktop cards look great
           const backendJobs = jobsResponse.jobs;
           if (backendJobs.length >= 3) {
             setJobs(backendJobs.slice(0, 4));
@@ -198,7 +197,6 @@ export default function CandidateDashboard() {
   // Handle Search & Filter
   const handleSearch = ({ search, location, jobType }) => {
     setFilterCriteria({ search, location, jobType });
-    // Smooth scroll to jobs section if search executed
     if (search || location || jobType) {
       jobsSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
@@ -280,7 +278,7 @@ export default function CandidateDashboard() {
   const candidateDisplayName = user?.name || 'Alex';
 
   return (
-    <div className="min-h-screen bg-[#f8faff] flex font-sans text-slate-900 antialiased">
+    <div className="min-h-screen bg-[#F8FAFC] flex font-sans text-slate-900 antialiased selection:bg-orange-100 selection:text-orange-900">
       {/* A. Sidebar Navigation */}
       <Sidebar
         mobileOpen={mobileMenuOpen}
@@ -302,30 +300,30 @@ export default function CandidateDashboard() {
         {/* Content Body Container */}
         <main className="flex-1 p-4 sm:p-8 max-w-7xl w-full mx-auto space-y-8">
           {loading && (
-            <div className="w-full bg-blue-100/60 h-1 overflow-hidden rounded-full animate-pulse">
-              <div className="bg-blue-600 h-1 w-1/3"></div>
+            <div className="w-full bg-orange-100/60 h-1 overflow-hidden rounded-full">
+              <div className="bg-[#FF5A0A] h-1 w-1/3 animate-pulse"></div>
             </div>
           )}
           
           {/* Unauthenticated Guest Demo Banner */}
           {!isAuthenticated && (
-            <div className="bg-blue-50/80 border border-blue-200/80 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
-              <div className="flex items-center gap-2.5 text-blue-900">
-                <Sparkles className="w-4 h-4 text-blue-600 shrink-0" />
+            <div className="bg-white border border-slate-200/90 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-2xs">
+              <div className="flex items-center gap-2.5 text-slate-800">
+                <Sparkles className="w-4 h-4 text-[#FF5A0A] shrink-0" />
                 <span>
-                  <strong>Candidate Demo Preview:</strong> You are viewing the dashboard screen with high-fidelity sample data.
+                  <strong className="text-slate-900 font-bold">Candidate Demo Preview:</strong> You are viewing the dashboard with curated role recommendations.
                 </span>
               </div>
               <div className="flex items-center gap-2 shrink-0">
                 <Link
                   to="/signin"
-                  className="px-3 py-1.5 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors"
+                  className="px-3.5 py-1.5 rounded-lg bg-[#080D1C] text-white font-semibold hover:bg-slate-800 transition-colors"
                 >
                   Sign In
                 </Link>
                 <Link
                   to="/signup"
-                  className="px-3 py-1.5 rounded-lg bg-white text-blue-700 border border-blue-200 font-semibold hover:bg-blue-50 transition-colors"
+                  className="px-3.5 py-1.5 rounded-lg bg-orange-50 text-[#FF5A0A] border border-orange-200/80 font-semibold hover:bg-orange-100 transition-colors"
                 >
                   Create Account
                 </Link>
@@ -340,7 +338,7 @@ export default function CandidateDashboard() {
             onBrowseClick={scrollToJobs}
           />
 
-          {/* D. Small Statistics Cards (Only 3 cards: Total Applications, Under Review, Shortlisted) */}
+          {/* D. Small Statistics Cards */}
           <section aria-label="Candidate Application Statistics">
             <StatsGroup
               totalApplications={stats.total}
@@ -358,10 +356,10 @@ export default function CandidateDashboard() {
           <section ref={jobsSectionRef} aria-label="Recent Job Opportunities" className="space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div className="flex items-center gap-2.5">
-                <h2 className="text-xl sm:text-2xl font-extrabold text-slate-950 tracking-tight">
+                <h2 className="text-xl sm:text-2xl font-extrabold text-[#080D1C] tracking-tight">
                   Recommended Recent Jobs
                 </h2>
-                <span className="text-[11px] font-bold text-amber-700 bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200/60 uppercase tracking-wide">
+                <span className="text-[11px] font-bold text-[#D9480F] bg-orange-50 px-2.5 py-0.5 rounded-full border border-orange-200/70 uppercase tracking-wide">
                   Matched For You
                 </span>
               </div>
@@ -373,7 +371,7 @@ export default function CandidateDashboard() {
                 <button
                   type="button"
                   onClick={scrollToJobs}
-                  className="inline-flex items-center gap-1 text-xs font-bold text-blue-600 hover:text-blue-800 transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1 text-xs font-bold text-slate-800 hover:text-[#FF5A0A] transition-colors cursor-pointer"
                 >
                   <span>View All Jobs</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -390,7 +388,7 @@ export default function CandidateDashboard() {
                 <button
                   type="button"
                   onClick={() => setFilterCriteria({ search: '', location: '', jobType: '' })}
-                  className="mt-3 text-xs font-semibold text-blue-600 hover:underline"
+                  className="mt-3 text-xs font-bold text-[#FF5A0A] hover:underline cursor-pointer"
                 >
                   Reset filters to see all jobs
                 </button>
@@ -416,7 +414,7 @@ export default function CandidateDashboard() {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
                 <div className="flex items-center gap-2">
-                  <h2 className="text-xl sm:text-2xl font-extrabold text-slate-950 tracking-tight">
+                  <h2 className="text-xl sm:text-2xl font-extrabold text-[#080D1C] tracking-tight">
                     Recent Applications
                   </h2>
                   <span className="text-xs text-slate-400 font-medium">
@@ -433,7 +431,7 @@ export default function CandidateDashboard() {
                 <button
                   type="button"
                   onClick={() => setForceEmptyApplications(!forceEmptyApplications)}
-                  className="text-[11px] font-medium text-slate-500 hover:text-slate-800 bg-white border border-slate-200/80 px-2.5 py-1 rounded-lg transition-colors cursor-pointer"
+                  className="text-[11px] font-semibold text-slate-600 hover:text-slate-900 bg-white border border-slate-200/80 px-2.5 py-1 rounded-lg transition-colors cursor-pointer"
                   title="Toggle between populated applications list and empty state for UI evaluation"
                 >
                   {forceEmptyApplications ? '← Preview Populated List' : 'Preview Empty State →'}
@@ -442,7 +440,7 @@ export default function CandidateDashboard() {
                 <button
                   type="button"
                   onClick={scrollToApplications}
-                  className="hidden sm:inline-flex items-center gap-1 text-xs font-bold text-blue-600 hover:text-blue-800 transition-colors"
+                  className="hidden sm:inline-flex items-center gap-1 text-xs font-bold text-slate-700 hover:text-[#FF5A0A] transition-colors"
                 >
                   <span>Manage all applications</span>
                   <ChevronRight className="w-3.5 h-3.5" />
@@ -462,7 +460,7 @@ export default function CandidateDashboard() {
             <span>CareerBridge Portal • Candidate Workspace</span>
             <div className="flex items-center gap-4">
               <span className="inline-flex items-center gap-1.5">
-                <span className={`w-2 h-2 rounded-full ${isLiveApi ? 'bg-emerald-500' : 'bg-blue-400'}`} />
+                <span className={`w-2 h-2 rounded-full ${isLiveApi ? 'bg-emerald-500' : 'bg-[#FF5A0A]'}`} />
                 <span>{isLiveApi ? 'Connected to live API' : 'Sample Data Connected'}</span>
               </span>
               <span>Updated in real-time</span>
