@@ -59,7 +59,7 @@ export default function SignUpPage() {
 
       setTimeout(() => {
         if (role === 'recruiter') {
-          navigate('/')
+          navigate('/recruiter/dashboard')
         } else {
           navigate('/dashboard')
         }

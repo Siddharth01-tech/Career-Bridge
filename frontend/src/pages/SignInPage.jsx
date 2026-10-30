@@ -30,7 +30,7 @@ export default function SignInPage() {
       setSuccess(true)
       setTimeout(() => {
         if (result?.user?.role === 'recruiter') {
-          navigate('/')
+          navigate('/recruiter/dashboard')
         } else {
           navigate('/dashboard')
         }

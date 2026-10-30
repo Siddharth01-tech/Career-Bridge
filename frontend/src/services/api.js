@@ -16,10 +16,12 @@ export async function apiRequest(endpoint, options = {}) {
     ...customConfig
   } = options;
 
+  const isFormData = typeof FormData !== 'undefined' && body instanceof FormData;
+
   const config = {
     method,
     headers: {
-      'Content-Type': 'application/json',
+      ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
       ...headers,
     },
     ...customConfig,
@@ -30,7 +32,7 @@ export async function apiRequest(endpoint, options = {}) {
   }
 
   if (body !== undefined) {
-    config.body = typeof body === 'string' ? body : JSON.stringify(body);
+    config.body = isFormData ? body : (typeof body === 'string' ? body : JSON.stringify(body));
   }
 
   // Ensure leading slash if missing
@@ -141,6 +143,70 @@ export const jobService = {
    */
   async getJobById(id) {
     return apiRequest(`/jobs/getajob/${id}`);
+  },
+
+  /**
+   * Create a new job requisition (Recruiter role required)
+   * @param {Object} jobData
+   */
+  async createJob(jobData) {
+    return apiRequest('/jobs/createjob', {
+      method: 'POST',
+      body: jobData,
+    });
+  },
+
+  /**
+   * Update an existing job requisition (Recruiter role required)
+   * @param {string|number} id
+   * @param {Object} jobData
+   */
+  async updateJob(id, jobData) {
+    return apiRequest(`/jobs/updateajob/${id}`, {
+      method: 'PUT',
+      body: jobData,
+    });
+  },
+
+  /**
+   * Delete an existing job requisition (Recruiter role required)
+   * @param {string|number} id
+   */
+  async deleteJob(id) {
+    return apiRequest(`/jobs/deletejob/${id}`, {
+      method: 'DELETE',
+    });
+  },
+};
+
+export const companyService = {
+  /**
+   * Fetch company profile of the authenticated recruiter
+   */
+  async getMyCompany() {
+    return apiRequest('/company/getcompany');
+  },
+
+  /**
+   * Create company profile (Recruiter role required)
+   * @param {FormData|Object} payload
+   */
+  async createCompany(payload) {
+    return apiRequest('/company/createcompany', {
+      method: 'POST',
+      body: payload,
+    });
+  },
+
+  /**
+   * Update company profile (Recruiter role required)
+   * @param {FormData|Object} payload
+   */
+  async updateCompany(payload) {
+    return apiRequest('/company/updatecompany', {
+      method: 'PUT',
+      body: payload,
+    });
   },
 };
 
