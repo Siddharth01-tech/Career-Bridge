@@ -5,10 +5,14 @@ import SignInPage from './pages/SignInPage'
 import SignUpPage from './pages/SignUpPage'
 import CandidateDashboard from './pages/CandidateDashboard'
 import RecruiterDashboard from './pages/RecruiterDashboard'
+import AdminDashboard from './pages/AdminDashboard'
 import './App.css'
 
 function DashboardRouter() {
   const { user } = useAuth()
+  if (user?.role === 'admin') {
+    return <AdminDashboard />
+  }
   if (user?.role === 'recruiter') {
     return <RecruiterDashboard />
   }
@@ -27,6 +31,8 @@ function App() {
         <Route path="/candidate/dashboard" element={<CandidateDashboard />} />
         <Route path="/recruiter/dashboard" element={<RecruiterDashboard />} />
         <Route path="/recruiter" element={<RecruiterDashboard />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
     </AuthProvider>
   )

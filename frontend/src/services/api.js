@@ -239,5 +239,59 @@ export const candidateService = {
   },
 };
 
+export const adminService = {
+  /**
+   * Fetch all registered users (Admin role required)
+   */
+  async getAllUsers() {
+    return apiRequest('/admin/users');
+  },
+
+  /**
+   * Fetch single user details by ID (Admin role required)
+   * @param {string|number} id
+   */
+  async getUserById(id) {
+    return apiRequest(`/admin/users/${id}`);
+  },
+
+  /**
+   * Block a user account (Admin role required)
+   * @param {string|number} id
+   */
+  async blockUser(id) {
+    return apiRequest(`/admin/users/${id}/block`, {
+      method: 'PUT',
+    });
+  },
+
+  /**
+   * Unblock a user account (Admin role required)
+   * @param {string|number} id
+   */
+  async unblockUser(id) {
+    return apiRequest(`/admin/users/${id}/unblock`, {
+      method: 'PUT',
+    });
+  },
+
+  /**
+   * Fetch all job postings across the platform (Admin role required)
+   */
+  async getAllJobs() {
+    return apiRequest('/admin/jobs');
+  },
+
+  /**
+   * Remove/delete a job posting (Admin role required)
+   * @param {string|number} id
+   */
+  async deleteJob(id) {
+    return apiRequest(`/admin/jobs/${id}`, {
+      method: 'DELETE',
+    });
+  },
+};
+
 export default authService;
 

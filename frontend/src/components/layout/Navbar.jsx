@@ -58,10 +58,20 @@ export default function Navbar({ onOpenPostJob }) {
           {isAuthenticated && user ? (
             <div className="flex items-center gap-3">
               <Link
-                to={user.role === 'recruiter' ? '/recruiter/dashboard' : '/dashboard'}
+                to={
+                  user.role === 'admin'
+                    ? '/admin/dashboard'
+                    : user.role === 'recruiter'
+                    ? '/recruiter/dashboard'
+                    : '/dashboard'
+                }
                 className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-orange-50 text-[#FF5A0A] hover:bg-orange-100 transition-colors border border-orange-200/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A0A]"
               >
-                {user.role === 'recruiter' ? 'Recruiter Dashboard' : 'Dashboard'}
+                {user.role === 'admin'
+                  ? 'Admin Panel'
+                  : user.role === 'recruiter'
+                  ? 'Recruiter Dashboard'
+                  : 'Dashboard'}
               </Link>
               <div className="flex items-center gap-2.5 pl-1">
                 <div className="w-8 h-8 rounded-full bg-orange-100 text-[#FF5A0A] font-bold text-xs flex items-center justify-center border border-orange-200 shadow-2xs">
@@ -183,11 +193,17 @@ export default function Navbar({ onOpenPostJob }) {
                 </div>
                 <div className="flex items-center gap-2 pt-2">
                   <Link
-                    to={user.role === 'recruiter' ? '/recruiter/dashboard' : '/dashboard'}
+                    to={
+                      user.role === 'admin'
+                        ? '/admin/dashboard'
+                        : user.role === 'recruiter'
+                        ? '/recruiter/dashboard'
+                        : '/dashboard'
+                    }
                     onClick={() => setMobileMenuOpen(false)}
                     className="flex-1 text-center py-2 rounded-xl bg-orange-50 text-[#FF5A0A] font-bold text-xs border border-orange-200"
                   >
-                    Go to {user.role === 'recruiter' ? 'Recruiter Dashboard' : 'Dashboard'}
+                    Go to {user.role === 'admin' ? 'Admin Panel' : user.role === 'recruiter' ? 'Recruiter Dashboard' : 'Dashboard'}
                   </Link>
                   <button
                     type="button"

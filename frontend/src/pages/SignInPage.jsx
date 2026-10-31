@@ -31,7 +31,9 @@ export default function SignInPage() {
       setLoggedInUser(result.user)
       setSuccess(true)
       setTimeout(() => {
-        if (result?.user?.role === 'recruiter') {
+        if (result?.user?.role === 'admin') {
+          navigate('/admin/dashboard')
+        } else if (result?.user?.role === 'recruiter') {
           navigate('/recruiter/dashboard')
         } else {
           navigate('/dashboard')
