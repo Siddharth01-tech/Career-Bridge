@@ -1,9 +1,10 @@
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/layout/Navbar';
 import Footer from '../components/layout/Footer';
 import JobDetailsModal from '../components/landing/JobDetailsModal';
 import PostJobModal from '../components/landing/PostJobModal';
+import { jobService } from '../services/api';
 import { 
   Search, 
   MapPin, 
@@ -15,72 +16,40 @@ import {
   Layers,
   Palette,
   Cloud,
-  Code2
+  Code2,
+  Briefcase
 } from 'lucide-react';
 
-const FEATURED_OPPORTUNITIES = [
-  {
-    id: 1,
-    title: 'Senior Frontend Engineer',
-    company: 'Vortex Labs',
-    location: 'San Francisco (Hybrid)',
-    iconType: 'orange-box',
-    icon: 'layout',
-    badge1: 'Full-time',
-    badge2: 'Design Systems',
-    compensation: '$150,000 – $185,000',
-    postedAgo: '2h ago',
-    tags: ['React', 'TypeScript', 'Next.js'],
-  },
-  {
-    id: 2,
-    title: 'Lead Product Designer',
-    company: 'HyperScale Design',
-    location: 'Remote',
-    iconType: 'gold-box',
-    icon: 'palette',
-    badge1: 'Remote',
-    badge2: 'Figma & UI',
-    compensation: '$140,000 – $175,000',
-    postedAgo: '4h ago',
-    tags: ['Design Systems', 'User Research', 'Prototyping'],
-  },
-  {
-    id: 3,
-    title: 'DevOps Architect',
-    company: 'Synapse Cloud',
-    location: 'New York, NY',
-    iconType: 'dark-box',
-    icon: 'cloud',
-    badge1: 'Full-time',
-    badge2: 'AWS / K8s',
-    compensation: '$170,000 – $215,000',
-    postedAgo: '6h ago',
-    tags: ['Kubernetes', 'Terraform', 'CI/CD'],
-  },
-  {
-    id: 4,
-    title: 'Full Stack Developer',
-    company: 'Acuity Core',
-    location: 'Remote',
-    iconType: 'orange-box',
-    icon: 'code',
-    badge1: 'Remote',
-    badge2: 'Node & React',
-    compensation: '$138,000 – $168,000',
-    postedAgo: '8h ago',
-    tags: ['Node.js', 'React', 'GraphQL', 'PostgreSQL'],
-  },
-];
-
 export default function LandingPage() {
-  const [jobs, setJobs] = useState(FEATURED_OPPORTUNITIES);
+  const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [searchRole, setSearchRole] = useState('');
   const [searchLocation, setSearchLocation] = useState('');
   const [savedJobs, setSavedJobs] = useState({});
   const [selectedJob, setSelectedJob] = useState(null);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [isPostJobOpen, setIsPostJobOpen] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    async function fetchJobs() {
+      setLoading(true);
+      try {
+        const response = await jobService.getAllJobs();
+        if (isMounted && response?.jobs) {
+          setJobs(response.jobs);
+        }
+      } catch (err) {
+        console.info('Backend jobs endpoint not reachable:', err.message);
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    }
+    fetchJobs();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const toggleSaveJob = (id) => {
     setSavedJobs((prev) => ({
@@ -90,7 +59,25 @@ export default function LandingPage() {
   };
 
   const handleOpenJob = (job) => {
-    setSelectedJob(job);
+    const formattedJob = {
+      ...job,
+      id: job.id,
+      title: job.title,
+      company: job.company_name || job.company || 'Verified Company',
+      location: job.location || job.company_location || 'Remote',
+      badge1: job.job_type || job.jobType || job.badge1 || 'Full-time',
+      badge2: (Array.isArray(job.skills) && job.skills.length > 0)
+        ? job.skills[0]
+        : (job.badge2 || job.industry || 'Engineering'),
+      compensation: job.salary_min && job.salary_max
+        ? `$${Number(job.salary_min).toLocaleString()} – $${Number(job.salary_max).toLocaleString()}`
+        : (job.salary_min ? `$${Number(job.salary_min).toLocaleString()}+` : (job.compensation || 'Competitive')),
+      tags: Array.isArray(job.skills) ? job.skills : (job.tags || []),
+      postedAgo: job.created_at
+        ? new Date(job.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+        : (job.postedAgo || 'Recent'),
+    };
+    setSelectedJob(formattedJob);
     setIsDetailsOpen(true);
   };
 
@@ -100,15 +87,20 @@ export default function LandingPage() {
 
   const filteredJobs = useMemo(() => {
     return jobs.filter((job) => {
+      const title = job.title || '';
+      const company = job.company_name || job.company || '';
+      const badge2 = Array.isArray(job.skills) ? job.skills.join(' ') : (job.skills || job.badge2 || '');
+      const location = job.location || job.company_location || '';
+
       const matchesRole =
         !searchRole.trim() ||
-        job.title.toLowerCase().includes(searchRole.toLowerCase()) ||
-        job.company.toLowerCase().includes(searchRole.toLowerCase()) ||
-        job.badge2.toLowerCase().includes(searchRole.toLowerCase());
+        title.toLowerCase().includes(searchRole.toLowerCase()) ||
+        company.toLowerCase().includes(searchRole.toLowerCase()) ||
+        badge2.toLowerCase().includes(searchRole.toLowerCase());
 
       const matchesLocation =
         !searchLocation.trim() ||
-        job.location.toLowerCase().includes(searchLocation.toLowerCase());
+        location.toLowerCase().includes(searchLocation.toLowerCase());
 
       return matchesRole && matchesLocation;
     });
@@ -226,9 +218,14 @@ export default function LandingPage() {
 
               {/* Stats Line */}
               <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-xs font-semibold text-slate-500">
-                <span className="text-slate-900 font-bold">14,200+ <span className="text-slate-500 font-normal">Live Requisitions</span></span>
+                <span className="text-slate-900 font-bold">
+                  {jobs.length > 0 ? `${jobs.length} Active` : 'Verified'}{' '}
+                  <span className="text-slate-500 font-normal">Requisitions</span>
+                </span>
                 <span className="text-slate-300">•</span>
-                <span className="text-slate-900 font-bold">2,800+ <span className="text-slate-500 font-normal">Verified Tech Companies</span></span>
+                <span className="text-slate-900 font-bold">
+                  Direct <span className="text-slate-500 font-normal">Employer Access</span>
+                </span>
                 <span className="text-slate-300">•</span>
                 <span className="flex items-center gap-1.5 text-slate-700 font-medium">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
@@ -332,103 +329,167 @@ export default function LandingPage() {
               href="#featured-opportunities" 
               className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-slate-700 hover:text-[#FF5A0A] transition-colors group"
             >
-              <span>Explore all 14,200 open positions</span>
+              <span>Explore all {jobs.length > 0 ? `${jobs.length} active openings` : 'verified openings'}</span>
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
             </a>
           </div>
 
-          {/* 4 Card Responsive Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {filteredJobs.map((job) => {
-              const isSaved = !!savedJobs[job.id];
-
-              return (
-                <div 
-                  key={job.id} 
-                  className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.02)] hover:border-orange-200/90 hover:shadow-[0_12px_28px_-6px_rgba(255,90,10,0.08)] hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between"
+          {/* Jobs Responsive Grid or Clean Empty State */}
+          {loading ? (
+            <div className="py-16 text-center">
+              <div className="inline-block w-8 h-8 border-3 border-orange-500/20 border-t-[#FF5A0A] rounded-full animate-spin mb-3"></div>
+              <p className="text-sm font-medium text-slate-500">Loading verified requisitions...</p>
+            </div>
+          ) : jobs.length === 0 ? (
+            <div className="bg-white rounded-3xl p-10 sm:p-14 border border-slate-200/80 text-center max-w-xl mx-auto shadow-2xs">
+              <div className="w-14 h-14 rounded-2xl bg-orange-50 text-[#FF5A0A] flex items-center justify-center mx-auto mb-4 border border-orange-100 shadow-2xs">
+                <Briefcase className="w-7 h-7" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-2">
+                No Active Job Requisitions Published Yet
+              </h3>
+              <p className="text-sm text-slate-500 leading-relaxed mb-6">
+                Verified openings posted by recruiters and employers will appear here in real time. Be the first to publish an opening or sign in to your dashboard.
+              </p>
+              <div className="flex flex-wrap items-center justify-center gap-3">
+                <Link
+                  to="/signup?role=recruiter"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#FF5A0A] hover:bg-[#E44D00] text-white text-xs sm:text-sm font-bold transition-all shadow-xs active:scale-95"
                 >
-                  <div>
-                    {/* Top: Icon Box + Company + Bookmark */}
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex items-center gap-3">
-                        
-                        {/* Company Icon styling based on card */}
-                        <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${
-                          job.iconType === 'orange-box' 
-                            ? 'bg-orange-50 text-[#FF5A0A] border border-orange-100' 
-                            : job.iconType === 'gold-box'
-                            ? 'bg-amber-50 text-amber-600 border border-amber-100'
-                            : 'bg-slate-100 text-slate-800'
-                        }`}>
-                          {job.icon === 'layout' && <Layers className="w-4 h-4" />}
-                          {job.icon === 'palette' && <Palette className="w-4 h-4" />}
-                          {job.icon === 'cloud' && <Cloud className="w-4 h-4" />}
-                          {job.icon === 'code' && <Code2 className="w-4 h-4" />}
+                  <span>Post an Opening</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+                <Link
+                  to="/signin"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white border border-slate-200 hover:bg-slate-50 text-slate-800 text-xs sm:text-sm font-semibold transition-all shadow-2xs"
+                >
+                  <span>Sign In</span>
+                </Link>
+              </div>
+            </div>
+          ) : filteredJobs.length === 0 ? (
+            <div className="bg-white rounded-2xl p-8 border border-slate-200/80 text-center max-w-md mx-auto">
+              <p className="text-sm text-slate-600 mb-3">
+                No openings matched your search criteria.
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchRole('');
+                  setSearchLocation('');
+                }}
+                className="text-xs font-bold text-[#FF5A0A] hover:underline cursor-pointer"
+              >
+                Clear search filters
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              {filteredJobs.map((job, idx) => {
+                const isSaved = !!savedJobs[job.id];
+                const companyName = job.company_name || job.company || 'Verified Company';
+                const location = job.location || job.company_location || 'Remote';
+                const badge1 = job.job_type || job.jobType || job.badge1 || 'Full-time';
+                const badge2 = (Array.isArray(job.skills) && job.skills.length > 0)
+                  ? job.skills[0]
+                  : (job.badge2 || job.industry || 'Engineering');
+                const compensation = job.salary_min && job.salary_max
+                  ? `$${Number(job.salary_min).toLocaleString()} – $${Number(job.salary_max).toLocaleString()}`
+                  : (job.salary_min ? `$${Number(job.salary_min).toLocaleString()}+` : (job.compensation || 'Competitive'));
+
+                const iconTypes = ['orange-box', 'gold-box', 'dark-box'];
+                const cardIconType = job.iconType || iconTypes[idx % iconTypes.length];
+
+                return (
+                  <div 
+                    key={job.id} 
+                    className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-[0_2px_8px_rgba(0,0,0,0.02)] hover:border-orange-200/90 hover:shadow-[0_12px_28px_-6px_rgba(255,90,10,0.08)] hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between"
+                  >
+                    <div>
+                      {/* Top: Icon Box + Company + Bookmark */}
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex items-center gap-3">
+                          <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${
+                            cardIconType === 'orange-box' 
+                              ? 'bg-orange-50 text-[#FF5A0A] border border-orange-100' 
+                              : cardIconType === 'gold-box'
+                              ? 'bg-amber-50 text-amber-600 border border-amber-100'
+                              : 'bg-slate-100 text-slate-800'
+                          }`}>
+                            {idx % 4 === 0 && <Layers className="w-4 h-4" />}
+                            {idx % 4 === 1 && <Palette className="w-4 h-4" />}
+                            {idx % 4 === 2 && <Cloud className="w-4 h-4" />}
+                            {idx % 4 === 3 && <Code2 className="w-4 h-4" />}
+                          </div>
+
+                          <div>
+                            <h4 className="text-[13px] font-bold text-slate-900 leading-snug truncate max-w-[140px]">
+                              {companyName}
+                            </h4>
+                            <span className="text-[11px] text-slate-400 block truncate max-w-[140px]">
+                              {location}
+                            </span>
+                          </div>
                         </div>
 
-                        <div>
-                          <h4 className="text-[13px] font-bold text-slate-900 leading-snug">{job.company}</h4>
-                          <span className="text-[11px] text-slate-400">{job.location}</span>
+                        <button
+                          type="button"
+                          onClick={() => toggleSaveJob(job.id)}
+                          className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
+                            isSaved ? 'text-[#FF5A0A]' : 'text-slate-300 hover:text-slate-600'
+                          }`}
+                          title={isSaved ? "Remove bookmark" : "Bookmark Job"}
+                          aria-label={isSaved ? "Remove bookmark" : "Bookmark Job"}
+                        >
+                          <Bookmark className={`w-4 h-4 ${isSaved ? 'fill-current' : ''}`} />
+                        </button>
+                      </div>
+
+                      {/* Job Title */}
+                      <h3 
+                        onClick={() => handleOpenJob(job)}
+                        className="text-[16px] font-bold text-slate-900 hover:text-[#FF5A0A] transition-colors cursor-pointer line-clamp-1 mb-3"
+                      >
+                        {job.title}
+                      </h3>
+
+                      {/* Tags */}
+                      <div className="flex flex-wrap gap-1.5 mb-5">
+                        <span className="px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[11px] font-semibold">
+                          {badge1}
+                        </span>
+                        <span className="px-2.5 py-0.5 rounded-md bg-orange-50 text-[#FF5A0A] text-[11px] font-semibold border border-orange-200/50">
+                          {badge2}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Compensation & View Requisition Button */}
+                    <div className="pt-3 border-t border-slate-100">
+                      <div className="mb-3">
+                        <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                          COMPENSATION
+                        </span>
+                        <div className="flex items-baseline gap-1">
+                          <span className="text-[14px] font-extrabold text-slate-900">{compensation}</span>
+                          <span className="text-[11px] text-slate-400 font-medium">/ year</span>
                         </div>
                       </div>
 
-                      <button
+                      <button 
                         type="button"
-                        onClick={() => toggleSaveJob(job.id)}
-                        className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
-                          isSaved ? 'text-[#FF5A0A]' : 'text-slate-300 hover:text-slate-600'
-                        }`}
-                        title={isSaved ? "Remove bookmark" : "Bookmark Job"}
-                        aria-label={isSaved ? "Remove bookmark" : "Bookmark Job"}
+                        onClick={() => handleOpenJob(job)}
+                        className="w-full py-2 px-3 rounded-xl bg-slate-100 hover:bg-orange-50 hover:text-[#FF5A0A] text-slate-800 text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer border border-transparent hover:border-orange-200"
                       >
-                        <Bookmark className={`w-4 h-4 ${isSaved ? 'fill-current' : ''}`} />
+                        <span>View Requisition</span>
+                        <ArrowUpRight className="w-3.5 h-3.5" />
                       </button>
                     </div>
-
-                    {/* Job Title */}
-                    <h3 
-                      onClick={() => handleOpenJob(job)}
-                      className="text-[16px] font-bold text-slate-900 hover:text-[#FF5A0A] transition-colors cursor-pointer line-clamp-1 mb-3"
-                    >
-                      {job.title}
-                    </h3>
-
-                    {/* Tags */}
-                    <div className="flex flex-wrap gap-1.5 mb-5">
-                      <span className="px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[11px] font-semibold">
-                        {job.badge1}
-                      </span>
-                      <span className="px-2.5 py-0.5 rounded-md bg-orange-50 text-[#FF5A0A] text-[11px] font-semibold border border-orange-200/50">
-                        {job.badge2}
-                      </span>
-                    </div>
                   </div>
-
-                  {/* Compensation & View Requisition Button */}
-                  <div className="pt-3 border-t border-slate-100">
-                    <div className="mb-3">
-                      <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                        COMPENSATION
-                      </span>
-                      <div className="flex items-baseline gap-1">
-                        <span className="text-[14px] font-extrabold text-slate-900">{job.compensation}</span>
-                        <span className="text-[11px] text-slate-400 font-medium">/ year</span>
-                      </div>
-                    </div>
-
-                    <button 
-                      type="button"
-                      onClick={() => handleOpenJob(job)}
-                      className="w-full py-2 px-3 rounded-xl bg-slate-100 hover:bg-orange-50 hover:text-[#FF5A0A] text-slate-800 text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer border border-transparent hover:border-orange-200"
-                    >
-                      <span>View Requisition</span>
-                      <ArrowUpRight className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+          )}
 
         </section>
 

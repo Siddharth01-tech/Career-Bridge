@@ -29,11 +29,11 @@ export default function CompanyProfileModal({
       setDescription(currentCompany.description || '');
       setLogoPreview(currentCompany.logo_url || '');
     } else {
-      setCompanyName('Starlight AI');
-      setIndustry('Artificial Intelligence & Cloud Systems');
-      setWebsite('https://starlight.ai');
-      setLocation('San Francisco, CA');
-      setDescription('Pioneering high-scale developer platforms and intelligent automation tooling.');
+      setCompanyName('');
+      setIndustry('');
+      setWebsite('');
+      setLocation('');
+      setDescription('');
       setLogoPreview('');
     }
     setLogoFile(null);
@@ -74,14 +74,10 @@ export default function CompanyProfileModal({
         if (industry.trim()) formData.append('industry', industry.trim());
         formData.append('logo', logoFile);
 
-        try {
-          if (currentCompany?.id) {
-            result = await companyService.updateCompany(formData);
-          } else {
-            result = await companyService.createCompany(formData);
-          }
-        } catch (apiErr) {
-          console.warn('Backend API error or offline mode:', apiErr.message);
+        if (currentCompany?.id) {
+          result = await companyService.updateCompany(formData);
+        } else {
+          result = await companyService.createCompany(formData);
         }
       } else {
         const payload = {
@@ -92,21 +88,17 @@ export default function CompanyProfileModal({
           industry: industry.trim() || undefined,
         };
 
-        try {
-          if (currentCompany?.id) {
-            result = await companyService.updateCompany(payload);
-          } else {
-            result = await companyService.createCompany(payload);
-          }
-        } catch (apiErr) {
-          console.warn('Backend API error or offline mode:', apiErr.message);
+        if (currentCompany?.id) {
+          result = await companyService.updateCompany(payload);
+        } else {
+          result = await companyService.createCompany(payload);
         }
       }
 
       setSuccess(true);
       setTimeout(() => {
-        const updated = {
-          id: currentCompany?.id || result?.company?.id || 1,
+        const updated = result?.company || {
+          id: currentCompany?.id || result?.id || Date.now(),
           company_name: companyName.trim(),
           companyName: companyName.trim(),
           description: description.trim(),
@@ -209,7 +201,7 @@ export default function CompanyProfileModal({
               <input
                 type="text"
                 required
-                placeholder="e.g. Starlight AI"
+                placeholder="e.g. Acme Corporation"
                 value={companyName}
                 onChange={(e) => setCompanyName(e.target.value)}
                 className="w-full text-xs sm:text-sm text-slate-800 p-3 rounded-xl border border-slate-200 focus:border-[#FF5A0A] focus:ring-2 focus:ring-[#FF5A0A]/25 outline-none transition-all placeholder-slate-400 font-medium"

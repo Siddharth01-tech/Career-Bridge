@@ -3,7 +3,7 @@ import { Search, MapPin, Briefcase, Plus, Building2, ShieldCheck } from 'lucide-
 
 export default function RecruiterWelcomeCard({ 
   recruiterName = 'Recruiter',
-  companyName = 'Starlight AI',
+  companyName = '',
   onSearch,
   onPostJobClick,
   onCompanyProfileClick 
@@ -44,7 +44,7 @@ export default function RecruiterWelcomeCard({
             </div>
             <span className="text-slate-300">•</span>
             <span className="text-xs font-semibold text-slate-500">
-              Hi, {recruiterName} ({companyName})
+              Hi, {recruiterName}{companyName ? ` (${companyName})` : ''}
             </span>
           </div>
 

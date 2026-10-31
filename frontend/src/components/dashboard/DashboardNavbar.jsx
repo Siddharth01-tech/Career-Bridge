@@ -14,7 +14,7 @@ import BrandLogo from '../common/BrandLogo';
 export default function DashboardNavbar({ 
   onToggleMobile, 
   isLiveApi = false,
-  unreadCount = 2
+  unreadCount = 0
 }) {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -38,7 +38,7 @@ export default function DashboardNavbar({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const candidateName = user?.name || 'Alex';
+  const candidateName = user?.name || 'Candidate';
   const initial = candidateName.charAt(0).toUpperCase();
 
   const handleLogout = async () => {
@@ -93,10 +93,10 @@ export default function DashboardNavbar({
               ? 'bg-emerald-50 text-emerald-700 border-emerald-200/70' 
               : 'bg-slate-50 text-slate-600 border-slate-200/80'
           }`}
-          title={isLiveApi ? 'Connected to live CareerBridge backend' : 'Running in local development / demo mode'}
+          title={isLiveApi ? 'Connected to live CareerBridge backend' : 'CareerBridge platform ready'}
         >
           <span className={`w-2 h-2 rounded-full ${isLiveApi ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'}`} />
-          <span>{isLiveApi ? 'Backend Live' : 'Demo Mode'}</span>
+          <span>{isLiveApi ? 'Backend Live' : 'System Ready'}</span>
         </div>
 
         {/* Notifications Popover */}
@@ -117,20 +117,15 @@ export default function DashboardNavbar({
             <div className="absolute right-0 mt-2 w-80 bg-white rounded-2xl shadow-xl border border-slate-100 py-3 z-50 animate-in fade-in zoom-in-95">
               <div className="px-4 pb-2 border-b border-slate-100 flex items-center justify-between">
                 <span className="text-xs font-bold text-slate-900">Notifications</span>
-                <span className="text-[10px] font-bold text-[#FF5A0A] bg-orange-50 px-2 py-0.5 rounded-full border border-orange-200/60">
-                  {unreadCount} new
-                </span>
+                {unreadCount > 0 && (
+                  <span className="text-[10px] font-bold text-[#FF5A0A] bg-orange-50 px-2 py-0.5 rounded-full border border-orange-200/60">
+                    {unreadCount} new
+                  </span>
+                )}
               </div>
               <div className="divide-y divide-slate-50 text-xs">
-                <div className="px-4 py-3 hover:bg-slate-50 transition-colors">
-                  <div className="font-semibold text-slate-800">Application Under Review</div>
-                  <div className="text-[11px] text-slate-500 mt-0.5">Nexus Dynamics has updated your Principal Systems Architect application.</div>
-                  <div className="text-[10px] text-slate-400 mt-1">2 hours ago</div>
-                </div>
-                <div className="px-4 py-3 hover:bg-slate-50 transition-colors">
-                  <div className="font-semibold text-slate-800">New Job Match</div>
-                  <div className="text-[11px] text-slate-500 mt-0.5">Starlight AI is looking for a Staff Cloud Platform Engineer matching your skills.</div>
-                  <div className="text-[10px] text-slate-400 mt-1">Yesterday</div>
+                <div className="py-8 px-4 text-center text-xs text-slate-400">
+                  No new notifications
                 </div>
               </div>
             </div>

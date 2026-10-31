@@ -23,9 +23,9 @@ export default function RecruiterSidebar({
   onApplicantsClick,
   onCompanyProfileClick,
   onPostJobClick,
-  jobCount = 4,
-  applicantCount = 8,
-  companyName = 'Starlight AI'
+  jobCount = 0,
+  applicantCount = 0,
+  companyName = ''
 }) {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -59,7 +59,7 @@ export default function RecruiterSidebar({
       label: 'My Requisitions',
       icon: Briefcase,
       active: activeTab === 'jobs',
-      badge: String(jobCount),
+      badge: jobCount > 0 ? String(jobCount) : undefined,
       action: () => {
         onSelectTab?.('jobs');
         onManageJobsClick?.();
@@ -71,7 +71,7 @@ export default function RecruiterSidebar({
       label: 'Applicants',
       icon: Users,
       active: activeTab === 'applicants',
-      badge: String(applicantCount),
+      badge: applicantCount > 0 ? String(applicantCount) : undefined,
       action: () => {
         onSelectTab?.('applicants');
         onApplicantsClick?.();
@@ -196,7 +196,7 @@ export default function RecruiterSidebar({
               {user?.name || 'Recruiter'}
             </div>
             <div className="text-[10px] text-slate-400 truncate">
-              {companyName || user?.email || 'recruiter@company.com'}
+              {companyName || user?.email || 'Recruiter Workspace'}
             </div>
           </div>
         </div>

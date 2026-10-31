@@ -3,10 +3,7 @@ import {
   X, 
   MapPin, 
   DollarSign, 
-  Briefcase, 
   CheckCircle2, 
-  Building2, 
-  Sparkles, 
   Clock, 
   Send,
   ShieldCheck,
@@ -18,7 +15,6 @@ export default function JobDetailsModal({ job, isOpen, onClose, onSaveJob, isSav
   const [applied, setApplied] = useState(false)
   const [applicantName, setApplicantName] = useState('')
   const [applicantEmail, setApplicantEmail] = useState('')
-  const [applicantResume, setApplicantResume] = useState(null)
 
   if (!isOpen || !job) return null
 
@@ -188,7 +184,7 @@ export default function JobDetailsModal({ job, isOpen, onClose, onSaveJob, isSav
                     <input 
                       type="text" 
                       required
-                      placeholder="Alex Taylor"
+                      placeholder="Your full name"
                       value={applicantName}
                       onChange={(e) => setApplicantName(e.target.value)}
                       className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-slate-900 text-sm outline-none bg-slate-50 focus:bg-white"
@@ -199,7 +195,7 @@ export default function JobDetailsModal({ job, isOpen, onClose, onSaveJob, isSav
                     <input 
                       type="email" 
                       required
-                      placeholder="alex@example.com"
+                      placeholder="name@example.com"
                       value={applicantEmail}
                       onChange={(e) => setApplicantEmail(e.target.value)}
                       className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-slate-900 text-sm outline-none bg-slate-50 focus:bg-white"

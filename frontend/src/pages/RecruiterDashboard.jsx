@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom';
 import { 
   Plus, 
   Sparkles, 
-  ChevronRight
+  ChevronRight,
+  Building2,
+  Briefcase
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { jobService, companyService } from '../services/api';
@@ -18,125 +20,6 @@ import CompanyProfileModal from '../components/recruiter/CompanyProfileModal';
 import RecruiterApplicantsList from '../components/recruiter/RecruiterApplicantsList';
 import DeleteJobModal from '../components/recruiter/DeleteJobModal';
 
-const INITIAL_COMPANY = {
-  id: 1,
-  company_name: 'Starlight AI',
-  industry: 'AI & Cloud Infrastructure',
-  location: 'San Francisco, CA • Hybrid',
-  website: 'https://starlight.ai',
-  description: 'Pioneering generative intelligence pipelines and next-generation developer platforms.',
-};
-
-const INITIAL_RECRUITER_JOBS = [
-  {
-    id: 'job-rec-1',
-    title: 'Lead Frontend Architect',
-    company_name: 'Starlight AI',
-    company_id: 1,
-    location: 'San Francisco, CA • Hybrid',
-    job_type: 'Full-time',
-    salary_min: 160000,
-    salary_max: 195000,
-    description: 'Lead visual design system execution, high-performance UI rendering, and enterprise React applications.',
-    skills: ['React', 'TypeScript', 'Tailwind CSS', 'Vite', 'GraphQL'],
-    experience: 5,
-    deadline: '2026-12-15',
-    created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-  },
-  {
-    id: 'job-rec-2',
-    title: 'Senior Distributed Systems Engineer',
-    company_name: 'Starlight AI',
-    company_id: 1,
-    location: 'Remote • US / Canada',
-    job_type: 'Full-time',
-    salary_min: 165000,
-    salary_max: 200000,
-    description: 'Architect resilient event-driven data streaming pipelines, PostgreSQL clusters, and microservices.',
-    skills: ['Node.js', 'PostgreSQL', 'Docker', 'Kubernetes', 'Redis'],
-    experience: 4,
-    deadline: '2026-12-31',
-    created_at: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString(),
-  },
-  {
-    id: 'job-rec-3',
-    title: 'Cloud DevOps & Platform Engineer',
-    company_name: 'Starlight AI',
-    company_id: 1,
-    location: 'Remote • Global',
-    job_type: 'Full-time',
-    salary_min: 150000,
-    salary_max: 185000,
-    description: 'Maintain CI/CD automation, cloud infrastructure security, and Kubernetes workload orchestration.',
-    skills: ['AWS', 'Terraform', 'CI/CD', 'Docker', 'Linux'],
-    experience: 3,
-    deadline: '2026-11-30',
-    created_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-  },
-  {
-    id: 'job-rec-4',
-    title: 'Product Design Lead (Design Systems)',
-    company_name: 'Starlight AI',
-    company_id: 1,
-    location: 'San Francisco, CA • Hybrid',
-    job_type: 'Full-time',
-    salary_min: 140000,
-    salary_max: 175000,
-    description: 'Design interactive web workflows, accessible component specifications, and developer documentation.',
-    skills: ['Figma', 'Design Systems', 'UI/UX', 'User Research'],
-    experience: 4,
-    deadline: '2026-12-20',
-    created_at: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
-  },
-];
-
-const INITIAL_APPLICANTS = [
-  {
-    id: 'app-1',
-    job_id: 'job-rec-1',
-    job_title: 'Lead Frontend Architect',
-    candidate_name: 'Alex Vance',
-    candidate_email: 'alex.vance@mit.edu',
-    created_at: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-    status: 'Shortlisted',
-    cover_letter: 'Deep experience building enterprise React applications and multi-tenant design systems.',
-    resume_name: 'Alex_Vance_Staff_Frontend.pdf',
-  },
-  {
-    id: 'app-2',
-    job_id: 'job-rec-2',
-    job_title: 'Senior Distributed Systems Engineer',
-    candidate_name: 'Marcus Chen',
-    candidate_email: 'marcus.chen@distributed.dev',
-    created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-    status: 'Under Review',
-    cover_letter: 'Spearheaded event-driven streaming at scale using PostgreSQL and distributed caches.',
-    resume_name: 'Marcus_Chen_Backend_2026.pdf',
-  },
-  {
-    id: 'app-3',
-    job_id: 'job-rec-4',
-    job_title: 'Product Design Lead (Design Systems)',
-    candidate_name: 'Elena Rostova',
-    candidate_email: 'elena@designcraft.io',
-    created_at: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-    status: 'Accepted',
-    cover_letter: 'Passionate about atomic design tokens and seamless engineering handoffs in Figma.',
-    resume_name: 'Elena_Rostova_Design_Systems.pdf',
-  },
-  {
-    id: 'app-4',
-    job_id: 'job-rec-1',
-    job_title: 'Lead Frontend Architect',
-    candidate_name: 'Liam Patel',
-    candidate_email: 'liam.patel@techlab.io',
-    created_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-    status: 'Under Review',
-    cover_letter: 'Experienced with Vite, Next.js, and high-performance browser rendering engines.',
-    resume_name: 'Liam_Patel_Resume.pdf',
-  },
-];
-
 export default function RecruiterDashboard() {
   const { user, isAuthenticated } = useAuth();
 
@@ -144,10 +27,10 @@ export default function RecruiterDashboard() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('dashboard');
 
-  // Company and Requisition Data
-  const [company, setCompany] = useState(INITIAL_COMPANY);
-  const [jobs, setJobs] = useState(INITIAL_RECRUITER_JOBS);
-  const [applicants, setApplicants] = useState(INITIAL_APPLICANTS);
+  // Real Company and Requisition Data only (no mock items)
+  const [company, setCompany] = useState(null);
+  const [jobs, setJobs] = useState([]);
+  const [applicants, setApplicants] = useState([]);
 
   // Search & Filter state
   const [filterCriteria, setFilterCriteria] = useState({ search: '', location: '', jobType: '' });
@@ -158,9 +41,6 @@ export default function RecruiterDashboard() {
   const [isCompanyModalOpen, setIsCompanyModalOpen] = useState(false);
   const [jobToDelete, setJobToDelete] = useState(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
-
-  // Testing demo toggle: Force empty state preview
-  const [forceEmptyApplicants, setForceEmptyApplicants] = useState(false);
 
   // API & Loading states
   const [loading, setLoading] = useState(true);
@@ -177,42 +57,43 @@ export default function RecruiterDashboard() {
     async function loadRecruiterData() {
       setLoading(true);
       let liveConnected = false;
+      let fetchedCompany = null;
 
       // 1. Fetch Company for Recruiter if authenticated
       if (isAuthenticated) {
         try {
           const compData = await companyService.getMyCompany();
           if (isMounted && compData && compData.id) {
+            fetchedCompany = compData;
             setCompany(compData);
             liveConnected = true;
+          } else if (isMounted) {
+            setCompany(null);
           }
         } catch (err) {
-          console.info('Recruiter company endpoint not reachable or no company created yet:', err.message);
+          console.info('Recruiter company not created yet or endpoint unreachable:', err.message);
+          if (isMounted) setCompany(null);
         }
       }
 
       // 2. Fetch Jobs from backend
       try {
         const jobsResponse = await jobService.getAllJobs();
-        if (isMounted && jobsResponse?.jobs && jobsResponse.jobs.length > 0) {
+        if (isMounted && jobsResponse?.jobs) {
           const allJobs = jobsResponse.jobs;
-          // Filter to jobs belonging to this recruiter or company if present
+          // Filter to jobs belonging to this recruiter or company
+          const currentCompanyId = fetchedCompany?.id || company?.id;
           const recruiterJobs = allJobs.filter((j) => {
             if (user?.id && j.recruiter_id === user.id) return true;
-            if (company?.id && j.company_id === company.id) return true;
+            if (currentCompanyId && j.company_id === currentCompanyId) return true;
             return false;
           });
 
-          if (recruiterJobs.length > 0) {
-            setJobs(recruiterJobs);
-          } else {
-            // Keep curated high-fidelity sample jobs with company name
-            setJobs(INITIAL_RECRUITER_JOBS);
-          }
+          setJobs(recruiterJobs);
           liveConnected = true;
         }
       } catch (err) {
-        console.info('Backend jobs endpoint not reachable, using sample recruiter opportunities:', err.message);
+        console.info('Backend jobs endpoint not reachable:', err.message);
       }
 
       if (isMounted) {
@@ -270,7 +151,7 @@ export default function RecruiterDashboard() {
       try {
         await jobService.deleteJob(job.id);
       } catch (err) {
-        console.warn('Backend delete API call finished or simulated:', err.message);
+        console.warn('Backend delete API call:', err.message);
       }
       setJobs((prev) => prev.filter((j) => j.id !== job.id));
       setJobToDelete(null);
@@ -301,7 +182,16 @@ export default function RecruiterDashboard() {
   };
 
   const recruiterDisplayName = user?.name || 'Recruiter';
-  const effectiveCompanyName = company?.company_name || 'Starlight AI';
+  const effectiveCompanyName = company?.company_name || '';
+
+  const handleOpenPostJob = () => {
+    if (!company) {
+      setIsCompanyModalOpen(true);
+    } else {
+      setJobToEdit(null);
+      setIsJobModalOpen(true);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] flex font-sans text-slate-900 antialiased selection:bg-orange-100 selection:text-orange-900">
@@ -314,10 +204,7 @@ export default function RecruiterDashboard() {
         onManageJobsClick={scrollToJobs}
         onApplicantsClick={scrollToApplicants}
         onCompanyProfileClick={() => setIsCompanyModalOpen(true)}
-        onPostJobClick={() => {
-          setJobToEdit(null);
-          setIsJobModalOpen(true);
-        }}
+        onPostJobClick={handleOpenPostJob}
         jobCount={jobs.length}
         applicantCount={applicants.length}
         companyName={effectiveCompanyName}
@@ -329,10 +216,7 @@ export default function RecruiterDashboard() {
         <RecruiterNavbar
           onToggleMobile={() => setMobileMenuOpen(!mobileMenuOpen)}
           isLiveApi={isLiveApi}
-          onPostJobClick={() => {
-            setJobToEdit(null);
-            setIsJobModalOpen(true);
-          }}
+          onPostJobClick={handleOpenPostJob}
           onCompanyProfileClick={() => setIsCompanyModalOpen(true)}
           companyName={effectiveCompanyName}
         />
@@ -345,13 +229,13 @@ export default function RecruiterDashboard() {
             </div>
           )}
 
-          {/* Unauthenticated Guest Demo Banner */}
+          {/* Unauthenticated Notice */}
           {!isAuthenticated && (
             <div className="bg-white border border-slate-200/90 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-2xs">
               <div className="flex items-center gap-2.5 text-slate-800">
                 <Sparkles className="w-4 h-4 text-[#FF5A0A] shrink-0" />
                 <span>
-                  <strong className="text-slate-900 font-bold">Recruiter Demo Preview:</strong> You are viewing the recruiter workspace with live requisition publishing and candidate management.
+                  <strong className="text-slate-900 font-bold">Sign In Required:</strong> Sign in with a recruiter account to manage your hiring pipeline.
                 </span>
               </div>
               <div className="flex items-center gap-2 shrink-0">
@@ -371,19 +255,43 @@ export default function RecruiterDashboard() {
             </div>
           )}
 
+          {/* Missing Company Profile Callout Banner */}
+          {!company && (
+            <div className="bg-gradient-to-r from-orange-50 via-white to-orange-50/40 border border-orange-200/90 rounded-3xl p-6 sm:p-7 flex flex-col md:flex-row md:items-center justify-between gap-5 shadow-xs">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-2xl bg-[#FF5A0A] text-white flex items-center justify-center shrink-0 shadow-sm shadow-orange-500/20">
+                  <Building2 className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="text-base sm:text-lg font-bold text-slate-900 leading-snug">
+                    Set up your Company Profile to start hiring
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-xl leading-relaxed">
+                    A verified company profile is required before you can publish job openings and receive applicant dossiers. It only takes a minute.
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsCompanyModalOpen(true)}
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[#080D1C] hover:bg-slate-800 text-white text-xs sm:text-sm font-bold transition-all shadow-xs cursor-pointer active:scale-95 shrink-0"
+              >
+                <Plus className="w-4 h-4 stroke-[2.5]" />
+                <span>Create Company Profile</span>
+              </button>
+            </div>
+          )}
+
           {/* C. Welcome Section */}
           <RecruiterWelcomeCard
             recruiterName={recruiterDisplayName}
             companyName={effectiveCompanyName}
             onSearch={handleSearch}
-            onPostJobClick={() => {
-              setJobToEdit(null);
-              setIsJobModalOpen(true);
-            }}
+            onPostJobClick={handleOpenPostJob}
             onCompanyProfileClick={() => setIsCompanyModalOpen(true)}
           />
 
-          {/* D. Statistics Cards (3 cards matching candidate design) */}
+          {/* D. Statistics Cards */}
           <section aria-label="Recruiter Requisition Statistics">
             <RecruiterStatsGroup
               totalJobs={jobs.length}
@@ -414,10 +322,7 @@ export default function RecruiterDashboard() {
                 </span>
                 <button
                   type="button"
-                  onClick={() => {
-                    setJobToEdit(null);
-                    setIsJobModalOpen(true);
-                  }}
+                  onClick={handleOpenPostJob}
                   className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#080D1C] hover:bg-slate-800 text-white text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#FF5A0A]"
                 >
                   <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
@@ -427,7 +332,27 @@ export default function RecruiterDashboard() {
             </div>
 
             {/* Requisitions Grid */}
-            {displayedJobs.length === 0 ? (
+            {jobs.length === 0 ? (
+              <div className="bg-white rounded-2xl p-10 border border-slate-200/80 text-center max-w-lg mx-auto">
+                <div className="w-12 h-12 rounded-2xl bg-orange-50 text-[#FF5A0A] flex items-center justify-center mx-auto mb-3 border border-orange-100">
+                  <Briefcase className="w-6 h-6" />
+                </div>
+                <h3 className="text-base font-bold text-slate-900 mb-1">
+                  No active job requisitions published yet
+                </h3>
+                <p className="text-xs text-slate-500 mb-5">
+                  Publish your first open position to connect with qualified candidates.
+                </p>
+                <button
+                  type="button"
+                  onClick={handleOpenPostJob}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#FF5A0A] hover:bg-[#E44D00] text-white text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-95"
+                >
+                  <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
+                  <span>Post First Requisition</span>
+                </button>
+              </div>
+            ) : displayedJobs.length === 0 ? (
               <div className="bg-white rounded-2xl p-8 border border-slate-200/80 text-center">
                 <p className="text-sm text-slate-500">
                   No requisitions match your filter &ldquo;{filterCriteria.search || filterCriteria.location || filterCriteria.jobType}&rdquo;.
@@ -472,7 +397,7 @@ export default function RecruiterDashboard() {
                     Candidate Submissions
                   </h2>
                   <span className="text-xs text-slate-400 font-medium">
-                    ({forceEmptyApplicants ? 0 : applicants.length} total received)
+                    ({applicants.length} total received)
                   </span>
                 </div>
                 <p className="text-xs text-slate-500 mt-0.5">
@@ -480,17 +405,7 @@ export default function RecruiterDashboard() {
                 </p>
               </div>
 
-              {/* Developer / Reviewer Demo State Toggle */}
               <div className="flex items-center gap-3">
-                <button
-                  type="button"
-                  onClick={() => setForceEmptyApplicants(!forceEmptyApplicants)}
-                  className="text-[11px] font-semibold text-slate-600 hover:text-slate-900 bg-white border border-slate-200/80 px-2.5 py-1 rounded-lg transition-colors cursor-pointer"
-                  title="Toggle between populated applicants list and empty state for UI evaluation"
-                >
-                  {forceEmptyApplicants ? '← Preview Populated List' : 'Preview Empty State →'}
-                </button>
-
                 <button
                   type="button"
                   onClick={scrollToApplicants}
@@ -504,11 +419,8 @@ export default function RecruiterDashboard() {
 
             {/* Applicants List */}
             <RecruiterApplicantsList
-              applicants={forceEmptyApplicants ? [] : applicants}
-              onPostJob={() => {
-                setJobToEdit(null);
-                setIsJobModalOpen(true);
-              }}
+              applicants={applicants}
+              onPostJob={handleOpenPostJob}
               onStatusChange={handleApplicationStatusChange}
             />
           </section>
@@ -519,7 +431,7 @@ export default function RecruiterDashboard() {
             <div className="flex items-center gap-4">
               <span className="inline-flex items-center gap-1.5">
                 <span className={`w-2 h-2 rounded-full ${isLiveApi ? 'bg-emerald-500' : 'bg-[#FF5A0A]'}`} />
-                <span>{isLiveApi ? 'Connected to live API' : 'Sample Data Connected'}</span>
+                <span>{isLiveApi ? 'Connected to live API' : 'System Ready'}</span>
               </span>
               <span>Updated in real-time</span>
             </div>
@@ -531,7 +443,7 @@ export default function RecruiterDashboard() {
       <RecruiterJobModal
         isOpen={isJobModalOpen}
         jobToEdit={jobToEdit}
-        companyId={company?.id || 1}
+        companyId={company?.id}
         companyName={effectiveCompanyName}
         onClose={() => {
           setIsJobModalOpen(false);

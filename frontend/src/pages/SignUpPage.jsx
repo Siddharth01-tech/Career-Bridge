@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Eye, EyeOff, ArrowRight, ArrowLeft, CheckCircle2, User, Building2, AlertCircle } from 'lucide-react'
+import { Eye, EyeOff, ArrowRight, ArrowLeft, CheckCircle2, User, Building2 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
+
+const CURRENT_YEAR = 2026;
 import BrandLogo from '../components/common/BrandLogo'
 
 export default function SignUpPage() {
@@ -200,7 +202,7 @@ export default function SignUpPage() {
                 <input
                   type="text"
                   required
-                  placeholder="Alex Vance"
+                  placeholder="Your full name"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   className="w-full px-4 py-2.5 rounded-xl border border-slate-200/90 focus:border-slate-950 focus:ring-4 focus:ring-slate-100 text-sm outline-none text-slate-900 placeholder:text-slate-400 bg-white transition-all font-medium"
@@ -215,7 +217,7 @@ export default function SignUpPage() {
                 <input
                   type="email"
                   required
-                  placeholder="alex.vance@example.com"
+                  placeholder="name@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full px-4 py-2.5 rounded-xl border border-slate-200/90 focus:border-slate-950 focus:ring-4 focus:ring-slate-100 text-sm outline-none text-slate-900 placeholder:text-slate-400 bg-white transition-all font-medium"
@@ -301,7 +303,7 @@ export default function SignUpPage() {
 
       {/* Footer Copyright */}
       <div className="max-w-6xl mx-auto w-full pb-2 text-center text-xs text-slate-400">
-        © {new Date().getFullYear()} CareerBridge Inc. Modern Talent Infrastructure.
+        © {CURRENT_YEAR} CareerBridge Inc. Modern Talent Infrastructure.
       </div>
 
     </div>

@@ -4,6 +4,8 @@ import { Eye, EyeOff, ArrowLeft, CheckCircle2, AlertCircle } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import BrandLogo from '../components/common/BrandLogo'
 
+const CURRENT_YEAR = 2026;
+
 export default function SignInPage() {
   const navigate = useNavigate()
   const { login } = useAuth()
@@ -239,7 +241,7 @@ export default function SignInPage() {
 
       {/* Footer Copyright */}
       <div className="max-w-6xl mx-auto w-full pb-2 text-center text-xs text-slate-400">
-        © {new Date().getFullYear()} CareerBridge Inc. Modern Talent Infrastructure.
+        © {CURRENT_YEAR} CareerBridge Inc. Modern Talent Infrastructure.
       </div>
 
     </div>

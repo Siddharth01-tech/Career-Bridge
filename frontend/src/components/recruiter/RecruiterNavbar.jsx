@@ -15,10 +15,10 @@ import BrandLogo from '../common/BrandLogo';
 export default function RecruiterNavbar({ 
   onToggleMobile, 
   isLiveApi = false,
-  unreadCount = 3,
+  unreadCount = 0,
   onPostJobClick,
   onCompanyProfileClick,
-  companyName = 'Starlight AI'
+  companyName = ''
 }) {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -83,7 +83,11 @@ export default function RecruiterNavbar({
             </span>
           </div>
           <p className="text-xs text-slate-500 font-normal">
-            Managing talent pipeline for <strong className="text-slate-700">{companyName}</strong>.
+            {companyName ? (
+              <>Managing talent pipeline for <strong className="text-slate-700">{companyName}</strong>.</>
+            ) : (
+              'Manage your talent pipeline and active requisitions.'
+            )}
           </p>
         </div>
       </div>
@@ -107,10 +111,10 @@ export default function RecruiterNavbar({
               ? 'bg-emerald-50 text-emerald-700 border-emerald-200/70' 
               : 'bg-slate-50 text-slate-600 border-slate-200/80'
           }`}
-          title={isLiveApi ? 'Connected to live CareerBridge backend' : 'Running in local development / demo mode'}
+          title={isLiveApi ? 'Connected to live CareerBridge backend' : 'CareerBridge platform ready'}
         >
           <span className={`w-2 h-2 rounded-full ${isLiveApi ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'}`} />
-          <span>{isLiveApi ? 'Backend Live' : 'Demo Mode'}</span>
+          <span>{isLiveApi ? 'Backend Live' : 'System Ready'}</span>
         </div>
 
         {/* Notifications Popover */}
@@ -131,25 +135,15 @@ export default function RecruiterNavbar({
             <div className="absolute right-0 mt-2 w-80 bg-white rounded-2xl shadow-xl border border-slate-100 py-3 z-50 animate-in fade-in zoom-in-95">
               <div className="px-4 pb-2 border-b border-slate-100 flex items-center justify-between">
                 <span className="text-xs font-bold text-slate-900">Recruiter Notifications</span>
-                <span className="text-[10px] font-bold text-[#FF5A0A] bg-orange-50 px-2 py-0.5 rounded-full border border-orange-200/60">
-                  {unreadCount} new
-                </span>
+                {unreadCount > 0 && (
+                  <span className="text-[10px] font-bold text-[#FF5A0A] bg-orange-50 px-2 py-0.5 rounded-full border border-orange-200/60">
+                    {unreadCount} new
+                  </span>
+                )}
               </div>
               <div className="divide-y divide-slate-50 text-xs">
-                <div className="px-4 py-3 hover:bg-slate-50 transition-colors">
-                  <div className="font-semibold text-slate-800">New Candidate Application</div>
-                  <div className="text-[11px] text-slate-500 mt-0.5">Alex Architect submitted an application for Frontend Developer.</div>
-                  <div className="text-[10px] text-slate-400 mt-1">15 mins ago</div>
-                </div>
-                <div className="px-4 py-3 hover:bg-slate-50 transition-colors">
-                  <div className="font-semibold text-slate-800">Requisition Published</div>
-                  <div className="text-[11px] text-slate-500 mt-0.5">Backend Developer is now live and listed across candidate feeds.</div>
-                  <div className="text-[10px] text-slate-400 mt-1">2 hours ago</div>
-                </div>
-                <div className="px-4 py-3 hover:bg-slate-50 transition-colors">
-                  <div className="font-semibold text-slate-800">Company Verified</div>
-                  <div className="text-[11px] text-slate-500 mt-0.5">{companyName} corporate profile is verified for direct hiring.</div>
-                  <div className="text-[10px] text-slate-400 mt-1">Yesterday</div>
+                <div className="py-8 px-4 text-center text-xs text-slate-400">
+                  No new notifications
                 </div>
               </div>
             </div>

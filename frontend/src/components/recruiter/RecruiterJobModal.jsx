@@ -7,8 +7,8 @@ export default function RecruiterJobModal({
   onClose, 
   onSuccess, 
   jobToEdit = null,
-  companyId = 1,
-  companyName = 'Starlight AI' 
+  companyId = null,
+  companyName = '' 
 }) {
   const isEditing = !!jobToEdit;
 
@@ -65,11 +65,11 @@ export default function RecruiterJobModal({
       setTitle('');
       setDescription('');
       setJobType('Full-time');
-      setLocation('San Francisco, CA • Hybrid');
-      setSalaryMin('120000');
-      setSalaryMax('160000');
-      setSkills('React, TypeScript, Node.js');
-      setExperience('2');
+      setLocation('');
+      setSalaryMin('');
+      setSalaryMax('');
+      setSkills('');
+      setExperience('');
       setDeadline('');
     }
     setError('');
@@ -99,6 +99,11 @@ export default function RecruiterJobModal({
       return;
     }
 
+    if (!isEditing && !companyId) {
+      setError('A company profile is required to post a requisition. Please set up your company profile first.');
+      return;
+    }
+
     setLoading(true);
 
     const payload = {
@@ -114,25 +119,21 @@ export default function RecruiterJobModal({
     };
 
     if (!isEditing) {
-      payload.companyId = companyId || 1;
+      payload.companyId = companyId;
     }
 
     try {
       let result;
-      try {
-        if (isEditing) {
-          result = await jobService.updateJob(jobToEdit.id, payload);
-        } else {
-          result = await jobService.createJob(payload);
-        }
-      } catch (apiErr) {
-        console.warn('Backend API error or offline mode, applying client-side fallback:', apiErr.message);
+      if (isEditing) {
+        result = await jobService.updateJob(jobToEdit.id, payload);
+      } else {
+        result = await jobService.createJob(payload);
       }
 
       setSuccess(true);
       setTimeout(() => {
-        const savedJob = {
-          id: isEditing ? jobToEdit.id : (result?.job?.id || Date.now()),
+        const savedJob = result?.job || {
+          id: isEditing ? jobToEdit.id : (result?.id || Date.now()),
           title: payload.title,
           description: payload.description,
           job_type: payload.jobType,
@@ -140,7 +141,7 @@ export default function RecruiterJobModal({
           location: payload.location || 'Remote',
           company_name: companyName,
           company: companyName,
-          company_id: companyId || 1,
+          company_id: companyId,
           salary_min: payload.salaryMin,
           salary_max: payload.salaryMax,
           skills: payload.skills || [],

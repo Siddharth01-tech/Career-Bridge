@@ -1,13 +1,13 @@
 import { useState } from 'react'
-import { X, Building2, DollarSign, MapPin, Sparkles, CheckCircle2 } from 'lucide-react'
+import { X, Sparkles, CheckCircle2 } from 'lucide-react'
 
 export default function PostJobModal({ isOpen, onClose, onJobCreated }) {
   const [title, setTitle] = useState('')
   const [company, setCompany] = useState('')
-  const [location, setLocation] = useState('Remote')
-  const [compensation, setCompensation] = useState('$150,000 – $180,000')
-  const [badge1, setBadge1] = useState('Full-time')
-  const [badge2, setBadge2] = useState('React / Node')
+  const [location, setLocation] = useState('')
+  const [compensation, setCompensation] = useState('')
+  const [badge1] = useState('Full-time')
+  const [badge2, setBadge2] = useState('')
   const [submitted, setSubmitted] = useState(false)
 
   if (!isOpen) return null

@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
 import { X, Eye, EyeOff, ArrowRight, CheckCircle2, User, Building2 } from 'lucide-react'
 
 export default function AuthModal({ isOpen, mode = 'login', onClose }) {
@@ -163,7 +162,7 @@ export default function AuthModal({ isOpen, mode = 'login', onClose }) {
                 <input
                   type="text"
                   required
-                  placeholder="Alex Vance"
+                  placeholder="Your full name"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:border-slate-950 focus:ring-4 focus:ring-slate-100 text-sm outline-none text-slate-900 bg-white"
@@ -176,7 +175,7 @@ export default function AuthModal({ isOpen, mode = 'login', onClose }) {
               <input
                 type="email"
                 required
-                placeholder={activeTab === 'login' ? 'name@work.com' : 'alex.vance@example.com'}
+                placeholder="name@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:border-slate-950 focus:ring-4 focus:ring-slate-100 text-sm outline-none text-slate-900 bg-white"

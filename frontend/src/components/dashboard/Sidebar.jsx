@@ -19,7 +19,9 @@ export default function Sidebar({
   activeTab = 'dashboard', 
   onSelectTab,
   onBrowseJobsClick,
-  onApplicationsClick 
+  onApplicationsClick,
+  jobCount = 0,
+  applicationCount = 0
 }) {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -53,7 +55,7 @@ export default function Sidebar({
       label: 'Browse Jobs',
       icon: Search,
       active: activeTab === 'browse-jobs',
-      badge: '148',
+      badge: jobCount > 0 ? String(jobCount) : undefined,
       action: () => {
         onSelectTab?.('browse-jobs');
         onBrowseJobsClick?.();
@@ -65,7 +67,7 @@ export default function Sidebar({
       label: 'My Applications',
       icon: FileText,
       active: activeTab === 'applications',
-      badge: '3',
+      badge: applicationCount > 0 ? String(applicationCount) : undefined,
       action: () => {
         onSelectTab?.('applications');
         onApplicationsClick?.();
@@ -171,10 +173,10 @@ export default function Sidebar({
           </div>
           <div className="min-w-0 flex-1">
             <div className="text-xs font-bold text-slate-900 truncate">
-              {user?.name || 'Alex Candidate'}
+              {user?.name || 'Candidate'}
             </div>
             <div className="text-[10px] text-slate-400 truncate">
-              {user?.email || 'alex@example.com'}
+              {user?.email || 'Candidate Account'}
             </div>
           </div>
         </div>

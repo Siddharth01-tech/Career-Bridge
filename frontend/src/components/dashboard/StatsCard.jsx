@@ -66,9 +66,9 @@ export function StatsCard({
 }
 
 export default function StatsGroup({ 
-  totalApplications = 12, 
-  underReview = 5, 
-  shortlisted = 2,
+  totalApplications = 0, 
+  underReview = 0, 
+  shortlisted = 0,
   onCardClick 
 }) {
   const cards = [
@@ -78,9 +78,9 @@ export default function StatsGroup({
       value: totalApplications,
       icon: FolderKanban,
       iconBg: 'bg-orange-50 text-[#FF5A0A]',
-      badge: '+2 this week',
+      badge: totalApplications > 0 ? `${totalApplications} total` : undefined,
       badgeType: 'brand',
-      subtitle: 'Across active tech opportunities',
+      subtitle: totalApplications > 0 ? 'Across active tech opportunities' : 'No applications submitted yet',
     },
     {
       id: 'under_review',
@@ -88,9 +88,9 @@ export default function StatsGroup({
       value: underReview,
       icon: Clock3,
       iconBg: 'bg-amber-50 text-amber-700',
-      badge: 'In Progress',
+      badge: underReview > 0 ? 'In Progress' : undefined,
       badgeType: 'in-progress',
-      subtitle: 'Average recruiter wait: 3 business days',
+      subtitle: underReview > 0 ? 'Awaiting recruiter feedback' : 'No applications in review',
     },
     {
       id: 'shortlisted',
@@ -98,9 +98,9 @@ export default function StatsGroup({
       value: shortlisted,
       icon: Award,
       iconBg: 'bg-emerald-50 text-emerald-700',
-      badge: 'Interview Stage',
+      badge: shortlisted > 0 ? 'Interview Stage' : undefined,
       badgeType: 'success',
-      subtitle: '1 technical interview scheduled',
+      subtitle: shortlisted > 0 ? `${shortlisted} interview or offer milestones` : 'No shortlisted applications yet',
     },
   ];
 

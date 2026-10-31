@@ -2,9 +2,9 @@ import { Briefcase, Users, Award } from 'lucide-react';
 import { StatsCard } from '../dashboard/StatsCard';
 
 export default function RecruiterStatsGroup({ 
-  totalJobs = 4, 
-  totalApplicants = 8, 
-  shortlistedCount = 3,
+  totalJobs = 0, 
+  totalApplicants = 0, 
+  shortlistedCount = 0,
   onCardClick 
 }) {
   const cards = [
@@ -14,9 +14,9 @@ export default function RecruiterStatsGroup({
       value: totalJobs,
       icon: Briefcase,
       iconBg: 'bg-orange-50 text-[#FF5A0A]',
-      badge: '+1 this week',
+      badge: totalJobs > 0 ? `${totalJobs} live` : undefined,
       badgeType: 'brand',
-      subtitle: 'Live on CareerBridge public board',
+      subtitle: totalJobs > 0 ? 'Live on CareerBridge public board' : 'No active requisitions published yet',
     },
     {
       id: 'applicants',
@@ -24,9 +24,9 @@ export default function RecruiterStatsGroup({
       value: totalApplicants,
       icon: Users,
       iconBg: 'bg-amber-50 text-amber-700',
-      badge: 'In Review',
+      badge: totalApplicants > 0 ? 'In Review' : undefined,
       badgeType: 'in-progress',
-      subtitle: 'Reviewing candidate resumes',
+      subtitle: totalApplicants > 0 ? 'Candidate submissions received' : 'No candidate applications yet',
     },
     {
       id: 'shortlisted',
@@ -34,9 +34,9 @@ export default function RecruiterStatsGroup({
       value: shortlistedCount,
       icon: Award,
       iconBg: 'bg-emerald-50 text-emerald-700',
-      badge: 'Interview Stage',
+      badge: shortlistedCount > 0 ? 'Interview Stage' : undefined,
       badgeType: 'success',
-      subtitle: 'Scheduled for technical screens',
+      subtitle: shortlistedCount > 0 ? `${shortlistedCount} advanced to evaluation` : 'No candidates shortlisted yet',
     },
   ];
 

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Search, MapPin, Briefcase, ArrowRight, Zap } from 'lucide-react';
 
 export default function WelcomeCard({ 
-  candidateName = 'Alex',
+  candidateName = 'Candidate',
   onSearch,
   onBrowseClick 
 }) {
@@ -81,12 +81,12 @@ export default function WelcomeCard({
             </div>
             <div>
               <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                Profile Strength
+                Profile Status
               </div>
               <div className="text-sm font-bold text-slate-900 flex items-center gap-1.5 mt-0.5">
-                <span>92%</span>
+                <span>Active</span>
                 <span className="text-slate-300">•</span>
-                <span className="text-emerald-600 font-semibold text-xs">All Star</span>
+                <span className="text-emerald-600 font-semibold text-xs">Ready to Apply</span>
               </div>
             </div>
           </div>

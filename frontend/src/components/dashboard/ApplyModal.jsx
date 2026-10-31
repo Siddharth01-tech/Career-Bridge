@@ -16,8 +16,8 @@ export default function ApplyModal({
 
   if (!job) return null;
 
-  const candidateName = user?.name || 'Alex Candidate';
-  const candidateEmail = user?.email || 'alex@example.com';
+  const candidateName = user?.name || 'Candidate';
+  const candidateEmail = user?.email || '';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,24 +25,22 @@ export default function ApplyModal({
     setLoading(true);
 
     try {
-      // Attempt backend API submission
+      let response;
       try {
-        await applicationService.applyForJob({
+        response = await applicationService.applyForJob({
           jobId: job.id,
           coverLetter: coverLetter.trim() || undefined,
         });
       } catch (apiErr) {
-        // If backend returns 409 (already applied) or specific error
         if (apiErr.status === 409) {
           throw new Error('You have already applied for this job.');
         }
-        // If backend is offline or resume not uploaded yet on server, continue gracefully in demo mode
-        console.warn('Backend application API unavailable or requires resume upload. Proceeding with simulated success:', apiErr.message);
+        throw new Error(apiErr.message || 'Failed to submit application. Please ensure you have uploaded a resume.');
       }
 
       setSuccess(true);
       setTimeout(() => {
-        onSuccess?.({
+        onSuccess?.(response?.application || {
           id: Date.now(),
           job_id: job.id,
           job_title: job.title,
@@ -50,7 +48,6 @@ export default function ApplyModal({
           created_at: new Date().toISOString(),
           status: 'Under Review',
           cover_letter: coverLetter.trim(),
-          resume_name: 'Resume_Candidate.pdf',
         });
         onClose?.();
       }, 1200);
