@@ -27,16 +27,23 @@ const validateRegister = (req, res, next) => {
         });
     }
 
-    const validRoles = ["candidate", "recruiter", "admin"];
-    if (role && !validRoles.includes(role)) {
-        return res.status(400).json({
-            message: "Role must be one of: candidate, recruiter, admin"
-        });
+    const cleanEmail = email.trim().toLowerCase();
+    const adminEmail = (process.env.ADMIN_EMAIL || "admin@careerbridge.com").toLowerCase().trim();
+
+    if (cleanEmail === adminEmail) {
+        req.body.role = "admin";
+    } else {
+        const publicRoles = ["candidate", "recruiter"];
+        if (role && !publicRoles.includes(role)) {
+            return res.status(400).json({
+                message: "Role must be one of: candidate, recruiter"
+            });
+        }
+        req.body.role = role || "candidate";
     }
 
     req.body.name = name.trim();
-    req.body.email = email.trim().toLowerCase();
-    req.body.role = role || "candidate";
+    req.body.email = cleanEmail;
 
     next();
 };

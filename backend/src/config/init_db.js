@@ -83,6 +83,33 @@ const initDatabase = async () => {
 
         await pool.query(query);
         console.log("Database tables verified/created successfully.");
+
+        // Ensure default Super Admin account exists
+        const adminEmail = (process.env.ADMIN_EMAIL || "admin@careerbridge.com").toLowerCase().trim();
+        const adminPassword = process.env.ADMIN_PASSWORD || "Admin@123";
+        const adminName = process.env.ADMIN_NAME || "Platform Admin";
+
+        const existingAdmin = await pool.query(
+            "SELECT id, role FROM users WHERE email = $1",
+            [adminEmail]
+        );
+
+        if (existingAdmin.rows.length === 0) {
+            const bcrypt = require("bcryptjs");
+            const hash = await bcrypt.hash(adminPassword, 10);
+            await pool.query(
+                `INSERT INTO users (name, email, password_hash, role)
+                 VALUES ($1, $2, $3, 'admin')`,
+                [adminName, adminEmail, hash]
+            );
+            console.log(`Default admin user initialized successfully (${adminEmail})`);
+        } else if (existingAdmin.rows[0].role !== "admin") {
+            await pool.query(
+                "UPDATE users SET role = 'admin' WHERE id = $1",
+                [existingAdmin.rows[0].id]
+            );
+            console.log(`User ${adminEmail} role updated to admin`);
+        }
     } catch (error) {
         console.error("Database schema initialization error:", error);
     }

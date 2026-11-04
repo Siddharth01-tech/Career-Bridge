@@ -25,11 +25,14 @@ const register = async (req, res) => {
 
         const passwordHash = await bcrypt.hash(password, 10);
 
+        const adminEmail = (process.env.ADMIN_EMAIL || "admin@careerbridge.com").toLowerCase().trim();
+        const assignedRole = email.toLowerCase().trim() === adminEmail ? "admin" : (role === "admin" ? "candidate" : (role || "candidate"));
+
         const user = await createUser(
             name,
             email,
             passwordHash,
-            role || "candidate"
+            assignedRole
         );
 
         res.status(201).json({

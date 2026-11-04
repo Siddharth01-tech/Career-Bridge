@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Eye, EyeOff, ArrowRight, ArrowLeft, CheckCircle2, User, Building2, ShieldCheck } from 'lucide-react'
+import { Eye, EyeOff, ArrowRight, ArrowLeft, CheckCircle2, User, Building2 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 
 const CURRENT_YEAR = 2026;
@@ -49,20 +49,24 @@ export default function SignUpPage() {
     setLoading(true)
 
     try {
+      const cleanEmail = email.trim().toLowerCase()
+      const isAdminEmail = cleanEmail === 'admin@careerbridge.com'
+      const assignedRole = isAdminEmail ? 'admin' : role
+
       const result = await register({
         name: fullName.trim(),
-        email: email.trim().toLowerCase(),
+        email: cleanEmail,
         password,
-        role,
+        role: assignedRole,
       })
 
       setCreatedUser(result.user)
       setSuccess(true)
 
       setTimeout(() => {
-        if (role === 'admin' || result?.user?.role === 'admin') {
+        if (result?.user?.role === 'admin' || assignedRole === 'admin') {
           navigate('/admin/dashboard')
-        } else if (role === 'recruiter') {
+        } else if (assignedRole === 'recruiter') {
           navigate('/recruiter/dashboard')
         } else {
           navigate('/dashboard')
@@ -125,8 +129,8 @@ export default function SignUpPage() {
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               
-              {/* Role Selector (Candidate vs Recruiter vs Admin) */}
-              <div className="grid grid-cols-3 gap-2 sm:gap-2.5 mb-6">
+              {/* Role Selector (Candidate vs Recruiter) */}
+              <div className="grid grid-cols-2 gap-3.5 mb-6">
                 
                 {/* Candidate Option */}
                 <div
@@ -134,25 +138,26 @@ export default function SignUpPage() {
                   tabIndex={0}
                   onClick={() => setRole('candidate')}
                   onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setRole('candidate'); }}
-                  className={`relative p-3 sm:p-3.5 rounded-2xl border-2 transition-all cursor-pointer text-left select-none flex flex-col justify-between ${
+                  className={`relative p-4 rounded-2xl border-2 transition-all cursor-pointer text-left select-none flex flex-col justify-between ${
                     role === 'candidate'
                       ? 'border-[#FF5C00] bg-orange-50/20 shadow-xs'
                       : 'border-slate-200/80 bg-slate-50/50 hover:border-slate-300 hover:bg-slate-50'
                   }`}
                 >
-                  <div className="flex items-start justify-between mb-2">
-                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-orange-100 text-[#FF5C00] flex items-center justify-center">
-                      <User className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                  {/* Top: Icon + Orange Active Dot */}
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="w-8 h-8 rounded-lg bg-orange-100 text-[#FF5C00] flex items-center justify-center">
+                      <User className="w-4 h-4" />
                     </div>
                     {role === 'candidate' && (
-                      <span className="w-2 h-2 rounded-full bg-[#FF5C00]" />
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#FF5C00]" />
                     )}
                   </div>
 
                   <div>
-                    <h3 className="text-xs sm:text-sm font-bold text-slate-950 mb-0.5">Candidate</h3>
-                    <p className="text-[10px] sm:text-[11px] text-slate-500 leading-tight">
-                      Find jobs & build career.
+                    <h3 className="text-sm font-bold text-slate-950 mb-0.5">Candidate</h3>
+                    <p className="text-[11px] text-slate-500 leading-tight">
+                      Find jobs and build your career.
                     </p>
                   </div>
                 </div>
@@ -163,54 +168,25 @@ export default function SignUpPage() {
                   tabIndex={0}
                   onClick={() => setRole('recruiter')}
                   onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setRole('recruiter'); }}
-                  className={`relative p-3 sm:p-3.5 rounded-2xl border-2 transition-all cursor-pointer text-left select-none flex flex-col justify-between ${
+                  className={`relative p-4 rounded-2xl border-2 transition-all cursor-pointer text-left select-none flex flex-col justify-between ${
                     role === 'recruiter'
                       ? 'border-[#FF5C00] bg-orange-50/20 shadow-xs'
                       : 'border-slate-200/80 bg-slate-50/50 hover:border-slate-300 hover:bg-slate-50'
                   }`}
                 >
-                  <div className="flex items-start justify-between mb-2">
-                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-slate-200 text-slate-700 flex items-center justify-center">
-                      <Building2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="w-8 h-8 rounded-lg bg-slate-200 text-slate-700 flex items-center justify-center">
+                      <Building2 className="w-4 h-4" />
                     </div>
                     {role === 'recruiter' && (
-                      <span className="w-2 h-2 rounded-full bg-[#FF5C00]" />
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#FF5C00]" />
                     )}
                   </div>
 
                   <div>
-                    <h3 className="text-xs sm:text-sm font-bold text-slate-950 mb-0.5">Recruiter</h3>
-                    <p className="text-[10px] sm:text-[11px] text-slate-500 leading-tight">
-                      Post jobs & hire talent.
-                    </p>
-                  </div>
-                </div>
-
-                {/* Admin Option */}
-                <div
-                  role="button"
-                  tabIndex={0}
-                  onClick={() => setRole('admin')}
-                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setRole('admin'); }}
-                  className={`relative p-3 sm:p-3.5 rounded-2xl border-2 transition-all cursor-pointer text-left select-none flex flex-col justify-between ${
-                    role === 'admin'
-                      ? 'border-[#FF5C00] bg-orange-50/20 shadow-xs'
-                      : 'border-slate-200/80 bg-slate-50/50 hover:border-slate-300 hover:bg-slate-50'
-                  }`}
-                >
-                  <div className="flex items-start justify-between mb-2">
-                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-slate-200 text-slate-700 flex items-center justify-center">
-                      <ShieldCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                    </div>
-                    {role === 'admin' && (
-                      <span className="w-2 h-2 rounded-full bg-[#FF5C00]" />
-                    )}
-                  </div>
-
-                  <div>
-                    <h3 className="text-xs sm:text-sm font-bold text-slate-950 mb-0.5">Admin</h3>
-                    <p className="text-[10px] sm:text-[11px] text-slate-500 leading-tight">
-                      Platform governance.
+                    <h3 className="text-sm font-bold text-slate-950 mb-0.5">Recruiter</h3>
+                    <p className="text-[11px] text-slate-500 leading-tight">
+                      Create jobs and find talented candidates.
                     </p>
                   </div>
                 </div>

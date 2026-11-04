@@ -192,6 +192,23 @@ export default function SignInPage() {
                 </Link>
               </div>
 
+              {/* Admin Quick Fill Helper */}
+              <div className="pt-3 border-t border-slate-100 text-center">
+                <span className="text-[11px] text-slate-400">
+                  Platform Administrator? Use{' '}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEmail('admin@careerbridge.com');
+                      setPassword('Admin@123');
+                    }}
+                    className="text-[#FF5C00] font-semibold hover:underline cursor-pointer"
+                  >
+                    admin@careerbridge.com
+                  </button>
+                </span>
+              </div>
+
             </form>
           )}
 
